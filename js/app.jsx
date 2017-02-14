@@ -18,14 +18,19 @@ const StandardRouter = connect((state) => ({
     pages
 }))(require('../MapStore2/web/client/components/app/StandardRouter'));
 
-const appStore = require('../MapStore2/web/client/stores/StandardStore').bind(null, initialState, {});
-
+const initialActions = [
+];
+const appStore = require('../MapStore2/web/client/stores/StandardStore').bind(null, initialState, {
+    maps: require('../MapStore2/web/client/reducers/maps'),
+    security: require('../MapStore2/web/client/reducers/security')
+});
 const appConfig = {
-    storeOpts,
     appStore,
+    storeOpts,
     pluginsDef,
-    initialActions: [],
-    appComponent: StandardRouter
+    initialActions,
+    appComponent: StandardRouter,
+    printingEnabled: false
 };
 
 ReactDOM.render(

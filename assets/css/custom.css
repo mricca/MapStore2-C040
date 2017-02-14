@@ -1,0 +1,34 @@
+
+
+/**
+ * Copyright 2016, GeoSolutions Sas.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+#container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#page-maps .container-fluid {
+    min-height: 500px;
+}
+
+
+ .ms-footer {
+    text-align: center;
+    height: 100px;
+    width: 100%;
+}
+#mapstore-langselector {
+    float: right;
+    margin: 10px 10px 0 10px;
+}
+
+#MetadataModal .Select-menu-outer, #MetadataModal .Select-menu {
+    max-height: 100px;
+}
