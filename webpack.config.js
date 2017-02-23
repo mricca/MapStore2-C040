@@ -98,9 +98,9 @@ module.exports = {
     },
     devServer: {
         proxy: {
-            '/mapstore/rest/geostore': {
-                target: "http://dev.mapstore2.geo-solutions.it"//,
-                //pathRewrite: {'^/mapstore/rest/geostore' : '/geostore/rest'}
+            '/rest/geostore': {
+                target: "http://dev.mapstore2.geo-solutions.it",
+                pathRewrite: {'^/rest/geostore': '/mapstore/rest/geostore'}
             },
             '/mapstore/proxy': {
                 target: "http://dev.mapstore2.geo-solutions.it"
