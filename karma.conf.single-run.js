@@ -1,6 +1,4 @@
-var DefinePlugin = require("webpack/lib/DefinePlugin");
 var path = require("path");
-
 module.exports = function karmaConfig(config) {
     config.set({
 
@@ -39,31 +37,29 @@ module.exports = function karmaConfig(config) {
         },
 
         webpack: {
-            plugins: [
-              new DefinePlugin({
-                  "__DEVTOOLS__": true
-              })
-            ],
-            devtool: 'inline-source-map',
+            devtool: 'eval',
             module: {
-                loaders: [
-                    { test: /\.jsx?$/, exclude: /ol\.js$/, loader: 'babel-loader', include: [path.join(__dirname, "js"), path.join(__dirname, "MapStore2", "web", "client")] },
-                    { test: /\.css$/, loader: 'style!css'},
+                rules: [
+                    {
+                        test: /\.jsx?$/,
+                        exclude: /(__tests__|node_modules|legacy)\/|(__tests__|node_modules|legacy)\\|webpack\.js|utils\/(openlayers|leaflet)/,
+                        enforce: "pre",
+                        use: [
+                            {
+                                loader: 'babel-istanbul-loader'
+                            }
+                        ]
+                    },
+                    { test: /\.jsx?$/, exclude: /(ol\.js$|node_modules)/, loader: 'babel-loader', include: [path.join(__dirname, "js"), path.join(__dirname, "MapStore2", "web", "client")] },
+                    { test: /\.css$/, loader: 'style!css-loader'},
                     { test: /\.less$/, loader: "style!css!less-loader" },
                     { test: /\.woff(2)?(\?v=[0-9].[0-9].[0-9])?$/, loader: "url-loader?mimetype=application/font-woff" },
                     { test: /\.(ttf|eot|svg)(\?v=[0-9].[0-9].[0-9])?$/, loader: "file-loader?name=[name].[ext]" },
                     { test: /\.(png|jpg|gif|svg)$/, loader: 'url-loader?name=[path][name].[ext]&limit=8192'} // inline base64 URLs for <=8k images, direct URLs for the rest
-                ],
-                postLoaders: [
-                    {
-                        test: /\.jsx?$/,
-                        exclude: /(__tests__|node_modules|legacy)\/|webpack\.js|utils\/(openlayers|leaflet)/,
-                        loader: 'istanbul-instrumenter'
-                    }
                 ]
             },
             resolve: {
-                extensions: ['', '.js', '.json', '.jsx']
+                extensions: ['.js', '.json', '.jsx']
             }
         },
 
