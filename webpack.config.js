@@ -3,21 +3,36 @@ var DefinePlugin = require("webpack/lib/DefinePlugin");
 var LoaderOptionsPlugin = require("webpack/lib/LoaderOptionsPlugin");
 var NormalModuleReplacementPlugin = require("webpack/lib/NormalModuleReplacementPlugin");
 var NoEmitOnErrorsPlugin = require("webpack/lib/NoEmitOnErrorsPlugin");
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
+const extractThemesPlugin = require('./MapStore2/themes.js').extractThemesPlugin;
 module.exports = {
     entry: {
         'webpack-dev-server': 'webpack-dev-server/client?http://0.0.0.0:8081', // WebpackDevServer host and port
         'webpack': 'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
-        'MapStore2-C040': path.join(__dirname, "js", "app")
+        'MapStore2-C040': path.join(__dirname, "js", "app"),
+	"themes/default": path.join(__dirname, "MapStore2", "web", "client", "themes", "default", "theme.less")
     },
+
     output: {
         path: path.join(__dirname, "dist"),
         publicPath: "/dist/",
         filename: "[name].js"
     },
     plugins: [
+        new CopyWebpackPlugin([
+            { from: path.join(__dirname, 'node_modules', 'bootstrap', 'less'), to: path.join(__dirname, "MapStore2", "web", "client", "dist", "bootstrap", "less") }
+        ]),
         new LoaderOptionsPlugin({
-            debug: true
+            debug: true,
+            options: {
+                postcss: {
+                    plugins: [
+                      require('postcss-prefix-selector')({prefix: '.ms2', exclude: ['.ms2']})
+                    ]
+                },
+                context: __dirname
+            }
         }),
         new DefinePlugin({
             "__DEVTOOLS__": true,
@@ -27,7 +42,8 @@ module.exports = {
         new NormalModuleReplacementPlugin(/cesium$/, path.join(__dirname, "MapStore2", "web", "client", "libs", "cesium")),
         new NormalModuleReplacementPlugin(/openlayers$/, path.join(__dirname, "MapStore2", "web", "client", "libs", "openlayers")),
         new NormalModuleReplacementPlugin(/proj4$/, path.join(__dirname, "MapStore2", "web", "client", "libs", "proj4")),
-        new NoEmitOnErrorsPlugin()
+        new NoEmitOnErrorsPlugin(),
+        extractThemesPlugin
     ],
     resolve: {
       extensions: [".js", ".jsx"]
@@ -41,10 +57,13 @@ module.exports = {
                     loader: 'style-loader'
                 }, {
                     loader: 'css-loader'
+                }, {
+                  loader: 'postcss-loader'
                 }]
             },
             {
                 test: /\.less$/,
+                exclude: /themes[\\\/]?.+\.less$/,
                 use: [{
                     loader: 'style-loader'
                 }, {
@@ -52,6 +71,13 @@ module.exports = {
                 }, {
                     loader: 'less-loader'
                 }]
+            },
+            {
+                test: /themes[\\\/]?.+\.less$/,
+                use: extractThemesPlugin.extract({
+                        fallback: 'style-loader',
+                        use: ['css-loader', 'postcss-loader', 'less-loader']
+                    })
             },
             {
                 test: /\.woff(2)?(\?v=[0-9].[0-9].[0-9])?$/,
@@ -99,12 +125,12 @@ module.exports = {
     devServer: {
         proxy: {
             '/rest/geostore': {
-                target: "http://dev.mapstore2.geo-solutions.it",
-                pathRewrite: {'^/rest/geostore': '/mapstore/rest/geostore'}
+                target: "http://vm-linuxgeofetest.comune.genova.it",
+                pathRewrite: {'^/rest/geostore': '/MapStore2/rest/geostore'}
             },
             '/MapStore2/proxy': {
-                target: "http://dev.mapstore2.geo-solutions.it",
-                pathRewrite: {'^/MapStore2/proxy': '/mapstore/proxy'}
+                target: "http://vm-linuxgeofetest.comune.genova.it",
+                pathRewrite: {'^/MapStore2/proxy': '/MapStore2/proxy'}
             },
             '/geoserver': {
                 target: "http://vm-linuxgeofetest.comune.genova.it",
