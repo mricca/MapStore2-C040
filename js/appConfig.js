@@ -40,7 +40,7 @@ module.exports = {
                      enabled: false
                  },
                  print: {
-                     enabled: false
+                     enabled: true
                  },
                  toolbar: {
                      active: null,
@@ -55,23 +55,25 @@ module.exports = {
                  }
              },
              "maps": {
-                     "mapType": "openlayers"
+                     "mapType": "leaflet"
              },
              catalog: {
-                 "supportedFormats": [{"name": "csw", "label": "CSW"}]
+                 format: "wms",
+                 "supportedFormats": [{"name": "wms", "label": "WMS"}, {"name": "csw", "label": "CSW"}]
              }
          },
          mobile: {
              mapInfo: {enabled: true, infoFormat: 'text/html' },
              mousePosition: {enabled: true, crs: "EPSG:4326", showCenter: true},
              "maps": {
-                     "mapType": "openlayers"
+                     "mapType": "leaflet"
              },
              "home": {
-                     "mapType": "openlayers"
+                     "mapType": "leaflet"
              },
              catalog: {
-                 "supportedFormats": [{"name": "csw", "label": "CSW"}]
+                 format: "wms",
+                 "supportedFormats": [{"name": "wms", "label": "WMS"}, {"name": "csw", "label": "CSW"}]
              }
          }
      },

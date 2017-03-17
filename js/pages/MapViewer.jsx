@@ -15,15 +15,12 @@ const url = require('url');
 const urlQuery = url.parse(window.location.href, true).query;
 
 const ConfigUtils = require('../../MapStore2/web/client/utils/ConfigUtils');
-
-const MapView = require('../../MapStore2/web/client/containers/MapViewer');
-
 const {loadMapConfig} = require('../../MapStore2/web/client/actions/config');
-
-
 const {resetControls} = require('../../MapStore2/web/client/actions/controls');
 
-const MapViewer = React.createClass({
+const MapViewer = require('../../MapStore2/web/client/containers/MapViewer');
+
+const MapViewerPage = React.createClass({
     propTypes: {
         mode: React.PropTypes.string,
         params: React.PropTypes.object,
@@ -38,6 +35,7 @@ const MapViewer = React.createClass({
     },
     componentWillMount() {
         if (this.props.params.mapType && this.props.params.mapId) {
+
             if (!ConfigUtils.getDefaults().ignoreMobileCss) {
                 if (this.props.mode === 'mobile') {
                     require('../../MapStore2/web/client/product/assets/css/mobile.css');
@@ -45,15 +43,26 @@ const MapViewer = React.createClass({
             }
 
             // VMap = require('../components/viewer/Map')(this.props.params.mapType);
-            const mapId = (this.props.params.mapId === '0') ? null : this.props.params.mapId;
-            const config = urlQuery && urlQuery.config || null;
+            let mapId = (this.props.params.mapId === '0') ? null : this.props.params.mapId;
+            let config = urlQuery && urlQuery.config || null;
+            // if mapId is a string, is the name of the config to load
+            try {
+                let mapIdNumber = parseInt(mapId, 10);
+                if (isNaN(mapIdNumber)) {
+                    config = mapId;
+                    mapId = null;
+                }
+            } catch(e) {
+                config = mapId;
+                mapId = null;
+            }
             const {configUrl} = ConfigUtils.getConfigurationOptions({mapId, config});
             this.props.reset();
             this.props.loadMapConfig(configUrl, mapId);
         }
     },
     render() {
-        return (<MapView
+        return (<MapViewer
             plugins={this.props.plugins}
             params={this.props.params}
             />);
@@ -66,4 +75,4 @@ module.exports = connect((state) => ({
 {
     loadMapConfig,
     reset: resetControls
-})(MapViewer);
+})(MapViewerPage);

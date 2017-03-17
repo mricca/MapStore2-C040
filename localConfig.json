@@ -1,5 +1,10 @@
 {
   "geoStoreUrl": "rest/geostore/",
+  "printUrl": "/geoserver-test/pdf/info.json",
+  "proxyUrl": {
+    "url": "/MapStore2/proxy/?url=",
+    "useCORS": ["http://nominatim.openstreetmap.org", "https://nominatim.openstreetmap.org"]
+  },
   "bingApiKey": "AhuXBu7ipR1gNbBfXhtUAyCZ6rkC5PkWpxs2MnMRZ1ZupxQfivjLCch22ozKSCAn",
   "translationsPath": "MapStore2/web/client/translations",
   "mapquestApiKey": "__API_KEY_MAPQUEST__",
@@ -10,6 +15,9 @@
     {
       "urlPattern": ".*geostore.*",
       "method": "basic"
+    }, {
+      "urlPattern": "\\/geoserver.*",
+      "method": "authkey"
     }
   ],
   "plugins": {
@@ -36,8 +44,7 @@
           "collapsible": true,
           "viewerOptions": {
             "container": "{context.ReactSwipe}",
-            "header": "{context.SwipeHeader}",
-            "collapsible": false
+            "header": "{context.SwipeHeader}"
           },
           "bodyClass": "mobile-feature-info"
         }
@@ -104,6 +111,7 @@
          "viewerOptions": {
              "container": "{context.ReactSwipe}",
              "header": "{context.SwipeHeader}",
+             "collapsible": false,
              "headerOptions": {
                 "useButtons": true
              }
@@ -138,14 +146,53 @@
         "cfg": {
           "wrap": true,
           "initialCatalogURL": {
-            "csw": "/geoserver/csw",
-            "wms": "/geoserver/wms",
-            "wmts": "/geoserver/gwc/service/wmts"
+            "csw": "/geonetwork/srv/ita/csw",
+            "wms": "/geoserver-test/wms",
+            "wmts": "/geoserver-test/gwc/service/wmts"
           }
         }
     }, "MousePosition", {
         "name": "Search",
         "cfg": {
+          "searchOptions": {
+            "services": [{
+                "type": "wfs",
+                "priority": 2,
+                "displayName": "${properties.NOMEVIA}",
+                "subTitle": " (seleziona per cercare numero civico)",
+                "options": {
+                  "url": "/geoserver/wfs",
+                  "typeName": "SITGEO:V_ASTE_STRADALI_TOPONIMO_SUB",
+                  "queriableAttributes": ["NOMEVIA"],
+                  "sortBy": "ID",
+                  "srsName": "EPSG:4326",
+                  "maxFeatures": 4
+                },
+                "nestedPlaceholder": "Digita numero civico o località",
+                "then": [{
+                      "type": "wfs",
+                      "filterTemplate": " AND COD_STRADA = '${properties.COD_STRADA}'",
+                      "priority": 1,
+                      "displayName": "${properties.DESVIA} ${properties.TESTO}",
+                      "subTitle": " (ricerca numero civico)",
+                      "searchTextTemplate": "${properties.TESTO}",
+                      "options": {
+                        "url": "/geoserver/wfs",
+                        "typeName": "SITGEO:CIVICI_COD_TOPON",
+                        "queriableAttributes": ["TESTO"],
+                        "srsName": "EPSG:4326",
+                        "maxFeatures": 10
+                      }
+                  }]
+            }, {
+                "type": "nominatim",
+                "searchTextTemplate": "${properties.display_name}",
+                "options": {
+                  "polygon_geojson": 1,
+                  "limit": 3
+                }
+            }]
+          },
           "withToggle": ["max-width: 768px", "min-width: 768px"]
         }
     }, {
