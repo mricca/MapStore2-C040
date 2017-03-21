@@ -11,7 +11,7 @@ const {connect} = require('react-redux');
 
 const StandardApp = require('../MapStore2/web/client/components/app/StandardApp');
 
-const {pages, pluginsDef, initialState, storeOpts} = require('./appConfig');
+const {pages, pluginsDef, initialState, storeOpts, printingEnabled} = require('./appConfig');
 
 const StandardRouter = connect((state) => ({
     locale: state.locale || {},
@@ -30,7 +30,7 @@ const appConfig = {
     pluginsDef,
     initialActions,
     appComponent: StandardRouter,
-    printingEnabled: false
+    printingEnabled
 };
 
 ReactDOM.render(

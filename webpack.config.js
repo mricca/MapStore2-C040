@@ -11,7 +11,7 @@ module.exports = {
         'webpack-dev-server': 'webpack-dev-server/client?http://0.0.0.0:8081', // WebpackDevServer host and port
         'webpack': 'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
         'MapStore2-C040': path.join(__dirname, "js", "app"),
-	"themes/default": path.join(__dirname, "MapStore2", "web", "client", "themes", "default", "theme.less")
+        "themes/comge": path.join(__dirname, "assets", "themes", "comge", "theme.less")
     },
 
     output: {
@@ -132,9 +132,12 @@ module.exports = {
                 target: "http://vm-linuxgeofetest.comune.genova.it",
                 pathRewrite: {'^/MapStore2/proxy': '/MapStore2/proxy'}
             },
-            '/geoserver': {
+            '/geoserver/': {
                 target: "http://vm-linuxgeofetest.comune.genova.it",
-                pathRewrite: {'^/geoserver': '/geoserver-test'}
+                pathRewrite: {'^/geoserver/': '/geoserver-test/'}
+            },
+            '/geoserver-test/': {
+                target: "http://vm-linuxgeofetest.comune.genova.it"
             },
             '/geonetwork': {
                 target: "http://vm-linuxgeofetest.comune.genova.it"

@@ -7,6 +7,7 @@
  */
 
 module.exports = {
+    printingEnabled: true,
      pages: [{
          name: "home",
          path: "/",
@@ -15,6 +16,10 @@ module.exports = {
          name: "viewer",
          path: "/viewer",
          component: require('./pages/MapViewer')
+     }, {
+         name: "viewer",
+         path: "/featureviewer/:mapType/:layer/:cql_filter",
+         component: require('./pages/FeatureViewer')
      }, {
          name: "mapviewer",
          path: "/viewer/:mapType/:mapId",
