@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2017, GeoSolutions Sas.
  * All rights reserved.
  *
@@ -14,8 +14,5 @@ const FeatureLoader = React.createClass({
 });
 
 module.exports = {
-    FeatureLoaderPlugin: FeatureLoader,
-    epics: {
-        startLoading: require('../epics/featureloader').startLoading
-    }
+    FeatureLoaderPlugin: FeatureLoader
 };

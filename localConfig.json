@@ -166,17 +166,18 @@
                   "queriableAttributes": ["NOMEVIA"],
                   "sortBy": "ID",
                   "srsName": "EPSG:4326",
-                  "maxFeatures": 4
+                  "maxFeatures": 10,
+                  "blacklist": ["via", "viale", "piazza"]
                 },
                 "nestedPlaceholder": "Digita numero civico o località",
                 "then": [{
                       "type": "wfs",
-                      "filterTemplate": " AND COD_STRADA = '${properties.COD_STRADA}'",
                       "priority": 1,
                       "displayName": "${properties.DESVIA} ${properties.TESTO}",
                       "subTitle": " (ricerca numero civico)",
                       "searchTextTemplate": "${properties.TESTO}",
                       "options": {
+                        "staticFilter": " AND COD_STRADA = '${properties.COD_STRADA}'",
                         "url": "/geoserver/wfs",
                         "typeName": "SITGEO:CIVICI_COD_TOPON",
                         "queriableAttributes": ["TESTO"],
@@ -354,21 +355,11 @@
           "cfg": {
             "showResults": false
           }
-      }, "MeasureResults", "Print", "ShapeFile", {
+      }, "MeasureResults", {
         "name": "Settings",
         "cfg": {
           "wrap": true
         }
-      }, {
-          "name": "MetadataExplorer",
-          "cfg": {
-            "wrap": true,
-            "initialCatalogURL": {
-              "csw": "/geonetwork/srv/ita/csw",
-              "wms": "/geoserver-test/wms",
-              "wmts": "/geoserver-test/gwc/service/wmts"
-            }
-          }
       }, "MousePosition", {
           "name": "Search",
           "cfg": {
@@ -389,17 +380,18 @@
                   "nestedPlaceholder": "Digita numero civico o località",
                   "then": [{
                         "type": "wfs",
-                        "filterTemplate": " AND COD_STRADA = '${properties.COD_STRADA}'",
                         "priority": 1,
                         "displayName": "${properties.DESVIA} ${properties.TESTO}",
                         "subTitle": " (ricerca numero civico)",
                         "searchTextTemplate": "${properties.TESTO}",
                         "options": {
+                          "staticFilter": " AND COD_STRADA = '${properties.COD_STRADA}'",
                           "url": "/geoserver/wfs",
                           "typeName": "SITGEO:CIVICI_COD_TOPON",
                           "queriableAttributes": ["TESTO"],
                           "srsName": "EPSG:4326",
-                          "maxFeatures": 10
+                          "maxFeatures": 10,
+                          "blacklist": ["via", "viale", "piazza"]
                         }
                     }]
               }, {

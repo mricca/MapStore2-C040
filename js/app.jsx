@@ -1,5 +1,5 @@
-/**
- * Copyright 2016, GeoSolutions Sas.
+/*
+ * Copyright 2017, GeoSolutions Sas.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
@@ -18,11 +18,16 @@ const StandardRouter = connect((state) => ({
     pages
 }))(require('../MapStore2/web/client/components/app/StandardRouter'));
 
+const {startLoading, updateFeatureLoader} = require('./epics/featureloader');
+
 const initialActions = [
 ];
 const appStore = require('../MapStore2/web/client/stores/StandardStore').bind(null, initialState, {
     maps: require('../MapStore2/web/client/reducers/maps'),
     security: require('../MapStore2/web/client/reducers/security')
+}, {
+    "FEATUREVIEWER:startLoading": startLoading,
+    "FEATUREVIEWER:updateFeatureLoader": updateFeatureLoader
 });
 const appConfig = {
     appStore,
