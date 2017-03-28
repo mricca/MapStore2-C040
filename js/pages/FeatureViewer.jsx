@@ -34,7 +34,7 @@ const MapViewerPage = React.createClass({
         };
     },
     componentWillMount() {
-        this.props.onMount(this.props.params);
+        this.props.onMount(ConfigUtils.getConfigProp("wmsURL"), this.props.params, "config.json");
         if (!ConfigUtils.getDefaults().ignoreMobileCss) {
             if (this.props.mode === 'mobile') {
                 require('../../MapStore2/web/client/product/assets/css/mobile.css');
@@ -43,7 +43,7 @@ const MapViewerPage = React.createClass({
     },
     componentDidUpdate(prevProps) {
         if (this.props.params !== prevProps.params) {
-            this.props.onUpdate(prevProps, this.props.params);
+            this.props.onUpdate(prevProps, this.props.params, ConfigUtils.getConfigProp("wmsURL"));
         }
     },
     render() {

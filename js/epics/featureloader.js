@@ -23,19 +23,19 @@ module.exports = {
                 .switchMap( (action) =>
                     Rx.Observable.of(resetControls())
                         .concat(
-                            axios.get("config.json")
+                            action.configURL ? axios.get("config.json")
                                 .then( (response) => {
                                     if (typeof response.data === 'object') {
                                         return configureMap(response.data);
                                     }
-                                }))
+                                }) : Rx.Observable.empty() )
                         .concat(
-                            Rx.Observable.defer(() => axios.get( `/geoserver/wms?service=WMS&version=1.1.1&request=DescribeLayer&layers=${action.layer}&output_format=application/json`))
+                            Rx.Observable.defer(() => axios.get( `${action.wmsURL}?service=WMS&version=1.1.1&request=DescribeLayer&layers=${action.layer}&output_format=application/json`))
                                 .switchMap(({ data }) => // TODO change geoserver url
                                     Rx.Observable.of(addLayer({
                                         id: WMS_ID,
                                         type: 'wms',
-                                        url: '/geoserver/wms',
+                                        url: `${action.wmsURL}`,
                                         visibility: true,
                                         name: data.layerDescriptions && data.layerDescriptions[0] && data.layerDescriptions[0].layerName,
                                         title: data.layerDescriptions && data.layerDescriptions.layerName
@@ -68,6 +68,6 @@ module.exports = {
         updateFeatureLoader: action$ => action$.ofType(UPDATE).switchMap((action) => Rx.Observable.from([
             removeLayer(WMS_ID),
             removeLayer(WFS_ID),
-            startFeatureLoader(action)
+            startFeatureLoader(action.wmsURL, action)
         ]))
 };
