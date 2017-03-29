@@ -1,8 +1,8 @@
 {
-    "name": "MapStore2",
-    "version": "0.0.1",
-    "description": "GeoPortale - Comune di Genova",
-    "repository": "git@github.com:geosolutions-it/MapStore2-C040.git",
+  "name": "MapStore2",
+  "version": "0.0.1",
+  "description": "GeoPortale - Comune di Genova",
+  "repository": "git@github.com:geosolutions-it/MapStore2-C040.git",
   "main": "index.js",
   "devDependencies": {
     "babel-core": "6.8.0",
@@ -154,6 +154,7 @@
     "shpjs": "3.3.2",
     "turf-bbox": "3.0.10",
     "turf-buffer": "3.0.10",
+    "turf-extent": "^1.0.4",
     "turf-intersect": "3.0.10",
     "turf-point-on-surface": "3.0.10",
     "turf-union": "3.0.10",
