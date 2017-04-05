@@ -152,6 +152,7 @@
     "redux-undo": "0.5.0",
     "reselect": "2.5.1",
     "rxjs": "5.1.1",
+    "screenfull": "3.1.0",
     "shpjs": "3.3.2",
     "turf-bbox": "3.0.10",
     "turf-buffer": "3.0.10",
@@ -165,6 +166,7 @@
     "xml2js": "0.4.17"
   },
   "scripts": {
+    "postinstall": "rimraf node_modules/webpack/node_modules/uglify-js && node checkCesium.js && mkdirp ./js/libs/Cesium && download --extract --out ./js/libs/Cesium https://cesiumjs.org/releases/Cesium-1.17.zip || echo Cesium already installed",
     "clean": "rimraf dist",
     "compile": "npm run clean && mkdirp ./dist && webpack --progress --config prod-webpack.config.js",
     "start": "webpack-dev-server --progress --colors --port 8081 --hot --inline --content-base .",

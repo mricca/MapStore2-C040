@@ -8,15 +8,19 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 const {connect} = require('react-redux');
+const {createSelector} = require('reselect');
 
 const StandardApp = require('../MapStore2/web/client/components/app/StandardApp');
 
 const {pages, pluginsDef, initialState, storeOpts, printingEnabled} = require('./appConfig');
-
-const StandardRouter = connect((state) => ({
-    locale: state.locale || {},
+const routerSelector = createSelector(state => state.locale, (locale) => ({
+    locale: locale || {},
+    themeCfg: {
+        theme: "comge"
+    },
     pages
-}))(require('../MapStore2/web/client/components/app/StandardRouter'));
+}));
+const StandardRouter = connect(routerSelector)(require('../MapStore2/web/client/components/app/StandardRouter'));
 
 const {startLoading, updateFeatureLoader} = require('./epics/featureloader');
 

@@ -21,6 +21,15 @@
       "method": "authkey"
     }
   ],
+  "defaultMapOptions": {
+    "cesium": {
+        "terrainProvider": {
+            "type": "cesium",
+            "url": "https://assets.agi.com/stk-terrain/world",
+            "requestVertexNormals": true
+        }
+    }
+  },
   "plugins": {
     "mobile": [
       {
