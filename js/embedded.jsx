@@ -13,7 +13,7 @@ const {startLoading, updateFeatureLoader} = require('./epics/featureloader');
 const LocaleUtils = require('../MapStore2/web/client/utils/LocaleUtils');
 const startApp = () => {
     const StandardApp = require('../MapStore2/web/client/components/app/StandardApp');
-    const {pages, pluginsDef, initialState, storeOpts, printingEnabled} = require('./appConfig');
+    const {pages, pluginsDef, initialState, storeOpts, printingEnabled} = require('./appConfigEmbedded');
     const routerSelector = createSelector(state => state.locale, (locale) => ({
         locale: locale || {},
         themeCfg: {

@@ -7,7 +7,7 @@
     "useCORS": ["http://nominatim.openstreetmap.org", "https://nominatim.openstreetmap.org"]
   },
   "bingApiKey": "AhuXBu7ipR1gNbBfXhtUAyCZ6rkC5PkWpxs2MnMRZ1ZupxQfivjLCch22ozKSCAn",
-  "translationsPath": "MapStore2/web/client/translations",
+  "translationsPath": ["MapStore2/web/client/translations"],
   "mapquestApiKey": "__API_KEY_MAPQUEST__",
   "initialMapFilter": "",
   "ignoreMobileCss" : true,
@@ -23,6 +23,10 @@
   ],
   "defaultMapOptions": {
     "cesium": {
+        "flyTo": true,
+        "defaultFlightOptions": {
+          "duration": 1
+        },
         "terrainProvider": {
             "type": "cesium",
             "url": "https://assets.agi.com/stk-terrain/world",
@@ -31,14 +35,12 @@
     }
   },
   "plugins": {
-    "mobile": [
-      {
+        "mobile": [{
         "name": "Map",
         "cfg": {
           "tools": ["locate"]
         }
-      }, "DrawerMenu",
-      {
+            }, "DrawerMenu", {
         "name": "Identify",
         "showIn": ["Settings"],
         "cfg": {
@@ -54,12 +56,12 @@
           "collapsible": true,
           "viewerOptions": {
             "container": "{context.ReactSwipe}",
-            "header": "{context.SwipeHeader}"
+                        "header": "{context.SwipeHeader}",
+                        "collapsible": false
           },
           "bodyClass": "mobile-feature-info"
         }
-      },
-    {
+            }, {
       "name": "Locate",
       "override": {
         "Toolbar": {
@@ -142,19 +144,24 @@
         "id": "identifyBar"
       },
       "isDefault": false
-    }, "ZoomAll",
-    {
+            }, "ZoomAll", {
       "name": "MapLoading",
       "override": {
         "Toolbar": {
           "alwaysVisible": true
         }
       }
+            }, {
+                "name": "FullScreen",
+                "override": {
+                    "Toolbar": {
+                        "alwaysVisible": false
+                    }
+                }
     }, "Login",
     "OmniBar", "BurgerMenu", "Expander"
   ],
-  "desktop": ["Map", "Help", "Share", "DrawerMenu",
-    {
+        "desktop": ["Map", "Help", "Share", "DrawerMenu", {
        "name": "Identify",
        "showIn": ["IdentifyBar", "Settings"],
        "cfg": {
@@ -269,30 +276,26 @@
       },
       "isDefault": false
     },
-    "ScaleBox", "ZoomAll",
-    {
+            "ScaleBox", "ZoomAll", {
       "name": "MapLoading",
       "override": {
         "Toolbar": {
           "alwaysVisible": true
         }
       }
-    },
-    {
+            }, {
         "name": "Snapshot",
         "cfg": {
           "wrap": true
         }
-    },
-    {
+            }, {
       "name":"ZoomIn",
       "override": {
         "Toolbar": {
           "alwaysVisible": true
         }
       }
-    },
-    {
+            }, {
       "name":"ZoomOut",
       "override": {
         "Toolbar": {
@@ -300,93 +303,99 @@
         }
       }
     },
-    "OmniBar", "Login", "Save", "SaveAs", "BurgerMenu", "Expander", "Undo", "Redo"
+            "OmniBar", "Login", "Save", "SaveAs", "BurgerMenu", "Expander", "Undo", "Redo", "FullScreen"
   ],
-    "embedded": [
-      {
-        "name": "Map",
-        "cfg": {
-          "tools": ["locate"]
-        }
-      }, "Help", "DrawerMenu",
-      {
-         "name": "Identify",
-         "showIn": ["Settings"],
-         "cfg": {
-           "style": {
-               "position": "absolute",
-               "width": "100%",
-               "bottom": "0px",
-               "zIndex": 1010,
-               "maxHeight": "70%",
-               "marginBottom": 0
-           },
-           "draggable": false,
-           "collapsible": true,
-           "viewerOptions": {
-             "container": "{context.ReactSwipe}",
-             "header": "{context.SwipeHeader}",
-             "collapsible": false
-           },
-           "bodyClass": "mobile-feature-info"
-        }
-      },
-      {
-          "name": "Locate",
-          "override": {
-            "Toolbar": {
-              "alwaysVisible": true
+  "embedded": [{
+          "name": "Map",
+          "cfg": {
+              "tools": ["locate"]
+          }
+        }, {
+          "name": "DrawerMenu",
+          "hide": "{!(request.query && request.query.forceDrawer)}"
+          }, {
+            "name": "Identify",
+            "cfg": {
+                "style": {
+                    "position": "absolute",
+                    "width": "100%",
+                    "bottom": "0px",
+                    "zIndex": 1010,
+                    "maxHeight": "70%",
+                    "marginBottom": 0
+                },
+                "draggable": false,
+                "collapsible": true,
+                "viewerOptions": {
+                    "container": "{context.ReactSwipe}",
+                    "header": "{context.SwipeHeader}",
+                    "collapsible": false
+                },
+                "bodyClass": "mobile-feature-info"
             }
-          }
-      }, "TOC", "BackgroundSwitcher", {
-          "name": "Settings",
-          "cfg": {
-            "wrap": true
-          }
-      },
-      {
-         "name": "MousePosition",
-         "cfg": {
-           "id": "mapstore-mouseposition-mobile"
-         }
-      },
-      {
-          "name": "Search",
-          "cfg": {
-            "withToggle": ["max-width: 768px", "min-width: 768px"]
-          }
-      }, {
-        "name": "Toolbar",
-        "id": "NavigationBar",
-        "cfg": {
-          "id": "navigationBar"
-        }
-      }, {
-        "name": "Toolbar",
-        "id": "IdentifyBar",
-        "stateSelector": "identify",
-        "cfg": {
-          "id": "identifyBar"
+        }, {
+            "name": "ZoomAll",
+            "override": {
+                "Toolbar": {
+                    "alwaysVisible": true
+                }
+            }
+        }, {
+            "name": "Locate",
+            "override": {
+                "Toolbar": {
+                    "alwaysVisible": true
+                }
+            }
+        }, "TOC", "BackgroundSwitcher", {
+            "name": "Settings",
+            "cfg": {
+                "wrap": true
+            }
+        }, {
+            "name": "Search",
+            "cfg": {
+                "withToggle": ["max-width: 768px", "min-width: 768px"]
+            }
+        }, {
+            "name": "Toolbar",
+            "id": "NavigationBar",
+            "cfg": {
+                "id": "navigationBar"
+            }
+        }, {
+            "name": "MapLoading",
+            "override": {
+                "Toolbar": {
+                    "alwaysVisible": true
+                }
+            }
         },
-        "isDefault": false
-      },
-      {
-        "name": "MapLoading",
-        "override": {
-          "Toolbar": {
-            "alwaysVisible": true
-          }
+        "OmniBar", {
+            "name": "GoFull",
+            "override": {
+                "Toolbar": {
+                    "alwaysVisible": true
+                }
+            }
         }
-      },
-      "OmniBar", "BurgerMenu"
     ],
     "featureviewer": [{
         "name": "Map",
         "cfg": {
           "tools": [ "locate", "draw", "highlight"]
         }
-      }, "Share",
-      {
+      }, {
+        "name":"Share",
+        "cfg": {
+            "showAPI": false,
+            "embedOptions": {
+              "showTOCToggle": false
+            },
+            "shareUrlRegex": "(h[^#]*)(embedded.html){0,1}#(\\/featureviewer\\/[^\\/]*\\/[A-Za-z0-9]*)",
+            "shareUrlReplaceString": "$1$2#$3"
+        }
+      }, {
          "name": "Identify",
          "showIn": ["IdentifyBar", "Settings"],
          "cfg": {

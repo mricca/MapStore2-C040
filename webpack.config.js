@@ -11,6 +11,8 @@ module.exports = {
         'webpack-dev-server': 'webpack-dev-server/client?http://0.0.0.0:8081', // WebpackDevServer host and port
         'webpack': 'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
         'MapStore2-C040': path.join(__dirname, "js", "app"),
+        "embedded": path.join(__dirname, "js", "embedded"),
+        "ms2-api": path.join(__dirname, "js", "api"),
         "themes/comge": path.join(__dirname, "assets", "themes", "comge", "theme.less")
     },
 

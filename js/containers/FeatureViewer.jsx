@@ -35,7 +35,7 @@ const MapViewer = React.createClass({
         this.props.loadMapConfig();
     },
     render() {
-        return (<PluginsContainer mode="featureviewer" key="featureviewer" id="featureviewer" className="featureviewer"
+        return (<PluginsContainer mode="featureviewer" key="featureviewer" id="featureviewer" className="viewer"
             plugins={this.props.plugins}
             params={this.props.params}
             />);
