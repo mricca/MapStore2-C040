@@ -7,6 +7,8 @@ npm-debug.log
 coverage/
 web/.classpath
 web/.project
+web/.settings
 backend/.classpath
 backend/.project
+backend/.settings
 js/libs/Cesium/
