@@ -53,6 +53,7 @@ module.exports = {
         QueryPanelPlugin: require('../MapStore2/web/client/plugins/QueryPanel'),
         FeatureGridPlugin: require('../MapStore2/web/client/plugins/FeatureGrid'),
         TutorialPlugin: require('../MapStore2/web/client/plugins/Tutorial'),
+        GlobeViewSwitcher: require('../MapStore2/web/client/plugins/GlobeViewSwitcher'),
         HeaderPlugin: require('./plugins/Header'),
         FooterPlugin: require('./plugins/Footer'),
         AttributionPlugin: require('./plugins/Attribution'),
