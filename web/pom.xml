@@ -196,6 +196,38 @@
                         </resources>
                     </configuration>
                 </execution>
+                <execution>
+                    <id>CesiumJS</id>
+                    <phase>process-classes</phase>
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>${basedir}/target/MapStore2/js/libs/Cesium</outputDirectory>
+                        <encoding>UTF-8</encoding>
+                        <resources>
+                            <resource>
+                                <directory>${basedir}/../js/libs/Cesium</directory>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </execution>
+                <execution>
+                    <id>CesiumJNavigation</id>
+                    <phase>process-classes</phase>
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>${basedir}/target/MapStore2/MapStore2/web/client/libs/cesium-navigation</outputDirectory>
+                        <encoding>UTF-8</encoding>
+                        <resources>
+                            <resource>
+                                <directory>${basedir}/../MapStore2/web/client/libs/cesium-navigation</directory>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </execution>
             </executions>
         </plugin>
 
