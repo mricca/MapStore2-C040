@@ -41,7 +41,22 @@
         "cfg": {
           "tools": ["locate"]
         }
-            }, "DrawerMenu", {
+            }, "Version", "DrawerMenu",
+            {
+                "name": "BackgroundSelector",
+                "cfg": {
+                    "dimensions": {
+                    "bottom": "50px",
+                    "side": 65,
+                    "sidePreview": 65,
+                    "frame": 3,
+                    "margin": 5,
+                    "label": false,
+                    "vertical": true
+                   }
+                }
+            },
+            {
         "name": "Identify",
         "showIn": ["Settings"],
         "cfg": {
@@ -72,9 +87,9 @@
     }, "Home", "TOC", {
         "name": "Tutorial",
         "cfg": {
-          "preset": "mapMobile"
+            "preset": "default_mobile_tutorial"
         }
-    }, "BackgroundSwitcher", {
+            }, {
       "name": "Settings",
       "cfg": {
         "wrap": true
@@ -85,8 +100,7 @@
       "cfg": {
         "id": "mapstore-mouseposition-mobile"
       }
-    },
-    {
+            }, {
       "name": "Search",
       "cfg": {
         "withToggle": ["max-width: 768px", "min-width: 768px"],
@@ -159,28 +173,26 @@
                         "alwaysVisible": false
                     }
                 }
-    }, {
-        "name": "GlobeViewSwitcher",
-        "override": {
-            "Toolbar": {
-                "alwaysVisible": false
-            }
-        }
-      }, "Login",
-    "OmniBar", "BurgerMenu", "Expander"
+    },"Login",
+            "OmniBar", "BurgerMenu", "Expander", "GlobeViewSwitcher"
   ],
-        "desktop": ["Map", "Help", "Share", "DrawerMenu", {
+        "desktop": ["Map", "HelpLink", "Share", "DrawerMenu", {
+        "name": "BackgroundSelector",
+        "cfg": {
+                    "bottom": "50px"
+        }
+       }, {
        "name": "Identify",
        "showIn": ["IdentifyBar", "Settings"],
        "cfg": {
          "viewerOptions": {
              "container": "{context.ReactSwipe}",
              "header": "{context.SwipeHeader}",
-             "collapsible": false,
              "headerOptions": {
                 "useButtons": true
              }
-        }
+          },
+          "glyph": "info-sign"
        }
     },
     "Attribution",
@@ -194,14 +206,21 @@
     }, "Home", "FeatureGrid", {
         "name": "TOC",
         "cfg": {
-          "activateQueryTool": true
+          "activateQueryTool": true,
+          "layerOptions": {
+            "legendOptions": {
+              "legendContainerStyle": {
+                "overflowX": "auto"
+            },
+            "legendStyle": {
+              "maxWidth": "250%"
+            }
+              }
+          }
         }
-    }, "Tutorial", "BackgroundSwitcher", "Measure", {
-      "name": "Print",
-      "cfg": {
-          "useFixedScales": true
-        }
-      }, "ShapeFile", {
+            }, "Tutorial", {
+                "name": "Measure"
+            }, "Print", "ShapeFile", {
       "name": "Settings",
       "cfg": {
         "wrap": true
@@ -275,11 +294,12 @@
       "id": "IdentifyBar",
       "stateSelector": "identify",
       "cfg": {
-        "id": "identifyBar"
+        "id": "identifyBar",
+        "glyph": "info-sign"
       },
       "isDefault": false
     },
-            "ScaleBox", "ZoomAll", {
+            "ZoomAll", {
       "name": "MapLoading",
       "override": {
         "Toolbar": {
@@ -306,7 +326,7 @@
         }
       }
     },
-            "OmniBar", "Login", "Save", "SaveAs", "BurgerMenu", "Expander", "Undo", "Redo", "FullScreen", "GlobeViewSwitcher"
+            "OmniBar", "Login", "Save", "SaveAs", "BurgerMenu", "Expander", "Undo", "Redo", "FullScreen", "GlobeViewSwitcher", "SearchServicesConfig"
   ],
   "embedded": [{
           "name": "Map",
@@ -317,6 +337,18 @@
           "name": "DrawerMenu",
           "hide": "{!(request.query && request.query.forceDrawer)}"
           }, {
+                  "name": "BackgroundSelector",
+                  "cfg": {
+                      "dimensions": {
+                      "side": 65,
+                      "sidePreview": 65,
+                      "frame": 3,
+                      "margin": 5,
+                      "label": false,
+                      "vertical": true
+                     }
+                  }
+              }, {
             "name": "Identify",
             "cfg": {
                 "style": {
@@ -334,7 +366,8 @@
                     "header": "{context.SwipeHeader}",
                     "collapsible": false
                 },
-                "bodyClass": "mobile-feature-info"
+                "bodyClass": "mobile-feature-info",
+                "glyph": "info-sign"
             }
         }, {
             "name": "ZoomAll",
@@ -350,7 +383,7 @@
                     "alwaysVisible": true
                 }
             }
-        }, "TOC", "BackgroundSwitcher", {
+            }, "TOC", {
             "name": "Settings",
             "cfg": {
                 "wrap": true
@@ -434,8 +467,7 @@
           "id": "identifyBar"
         },
         "isDefault": false
-      },
-      "ScaleBox", "ZoomAll",
+      }, "ZoomAll",
       {
         "name": "MapLoading",
         "override": {
