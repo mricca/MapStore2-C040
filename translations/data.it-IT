@@ -1,0 +1,19 @@
+{
+    "locale": "it-IT",
+    "messages": {
+        "cantieriGrid": {
+            "toolbar": {
+                "save": "Salva",
+                "reset": "Reset",
+                "polygonSelectionTooltip": "Disegna un poligono sulla mappa",
+                "pointSelectionTooltip": "Clicca sugli elementi per selezionarli",
+                "areas": "Aree",
+                "elements": "Elementi",
+                "deleteRow": "Elimina quest'area"
+            },
+            "error":{
+                "maxFeatures": "E' stato raggiunto il numero massimo (1000) di elementi che si possono ottenere."
+            }
+        }
+    }
+}

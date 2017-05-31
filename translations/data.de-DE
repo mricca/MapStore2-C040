@@ -1,0 +1,19 @@
+{
+    "locale": "de-DE",
+    "messages": {
+        "cantieriGrid": {
+            "toolbar": {
+                "save": "Einreichen",
+                "reset": "Zurücksetzen",
+                "polygonSelectionTooltip": "Zeichne ein Polygon auf der Karte",
+                "pointSelectionTooltip": "Klicken Sie auf die Elemente, um sie auszuwählen",
+                "areas": "Bereiche",
+                "elements": "Elemente",
+                "deleteRow": "Löschen Sie diesen Bereich"
+            },
+            "error":{
+                "maxFeatures": "Il a été atteint le nombre maximum (1000) d'éléments qui peuvent être obtenus"
+            }
+        }
+    }
+}

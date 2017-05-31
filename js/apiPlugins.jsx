@@ -1,11 +1,10 @@
-/**
+/*
  * Copyright 2017, GeoSolutions Sas.
  * All rights reserved.
  *
  * This source code is licensed under the BSD-style license found in the
  * LICENSE file in the root directory of this source tree.
  */
-
 module.exports = {
     plugins: {
         MousePositionPlugin: require('../MapStore2/web/client/plugins/MousePosition'),
@@ -49,7 +48,8 @@ module.exports = {
         FeatureGridPlugin: require('../MapStore2/web/client/plugins/FeatureGrid'),
         TutorialPlugin: require('../MapStore2/web/client/plugins/Tutorial'),
         AttributionPlugin: require('./plugins/Attribution'),
-        FeatureLoader: require('./plugins/FeatureLoader')
+        FeatureLoader: require('./plugins/FeatureLoader'),
+        LavoriPubbliciPlugin: require('./plugins/LavoriPubblici')
     },
     requires: {
         ReactSwipe: require('react-swipeable-views').default,

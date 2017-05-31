@@ -7,7 +7,7 @@
     "useCORS": ["http://nominatim.openstreetmap.org", "https://nominatim.openstreetmap.org"]
   },
   "bingApiKey": "AhuXBu7ipR1gNbBfXhtUAyCZ6rkC5PkWpxs2MnMRZ1ZupxQfivjLCch22ozKSCAn",
-  "translationsPath": ["MapStore2/web/client/translations"],
+  "translationsPath": ["MapStore2/web/client/translations","translations"],
   "mapquestApiKey": "__API_KEY_MAPQUEST__",
   "initialMapFilter": "",
   "ignoreMobileCss" : true,
@@ -173,14 +173,21 @@
                         "alwaysVisible": false
                     }
                 }
-    },"Login",
+    }, {
+        "name": "GlobeViewSwitcher",
+        "override": {
+            "Toolbar": {
+                "alwaysVisible": false
+            }
+        }
+      }, "Login",
             "OmniBar", "BurgerMenu", "Expander", "GlobeViewSwitcher"
   ],
         "desktop": ["Map", "HelpLink", "Share", "DrawerMenu", {
         "name": "BackgroundSelector",
-        "cfg": {
+                        "cfg" :{
                     "bottom": "50px"
-        }
+                        }
        }, {
        "name": "Identify",
        "showIn": ["IdentifyBar", "Settings"],
@@ -188,6 +195,7 @@
          "viewerOptions": {
              "container": "{context.ReactSwipe}",
              "header": "{context.SwipeHeader}",
+             "collapsible": false,
              "headerOptions": {
                 "useButtons": true
              }
@@ -348,7 +356,7 @@
                       "vertical": true
                      }
                   }
-              }, {
+          }, {
             "name": "Identify",
             "cfg": {
                 "style": {

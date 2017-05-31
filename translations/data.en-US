@@ -1,0 +1,19 @@
+{
+    "locale": "en-US",
+    "messages": {
+        "cantieriGrid": {
+            "toolbar": {
+                "save": "Save",
+                "reset": "Reset",
+                "polygonSelectionTooltip": "Draw a polygon on the map",
+                "pointSelectionTooltip": "Click on the elements to select them",
+                "areas": "Areas",
+                "elements": "Elements",
+                "deleteRow": "Delete this area"
+            },
+            "error":{
+                "maxFeatures": "The limit of maximum number (1000) of elements that can be obtained is reached"
+            }
+        }
+    }
+}
