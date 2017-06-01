@@ -79,8 +79,8 @@
                             "url": "http://vm-linuxgeofetest.comune.genova.it/geoserver-test/ows",
             				"type": "wms",
                             "format": "image/png8",
-                            "name": "CORSO_1:V_TEST_CANTIERI",
-            				"title": "V_TEST_CANTIERI",
+                            "name": "CORSO_1:V_ELEMENTI_CANTIERI",
+            				"title": "ELEMENTI CANTIERI",
             				"group": "Cantieri",
                             "visibility": true
                         }]
@@ -110,7 +110,7 @@
                 "maxFeatures": 1000
             };
             MapStore2.triggerAction({
-                type: "INIT_ELEMENTI_PUBBLICI_PLUGIN",
+                type: "INIT_CANTIERI_PLUGIN",
                 options: options
             });
             MapStore2.triggerAction({

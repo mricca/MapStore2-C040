@@ -6,34 +6,47 @@
  * LICENSE file in the root directory of this source tree.
  */
 const Rx = require('rxjs');
+const area = require('@turf/area');
 const {CLICK_ON_MAP} = require('../../MapStore2/web/client/actions/map');
+const {ROWS_SELECTED, ROWS_DESELECTED} = require('../actions/cantieri');
+const {featureToRow, isSameFeature, checkFeature, uncheckFeature} = require('../utils/CantieriUtils');
 const axios = require('../../MapStore2/web/client/libs/ajax');
 const {addLayer, changeLayerProperties} = require('../../MapStore2/web/client/actions/layers');
 const {changeDrawingStatus, END_DRAWING} = require('../../MapStore2/web/client/actions/draw');
-// const {MAP_CONFIG_LOADED} = require('../../MapStore2/web/client/actions/config');
-const CoordinatesUtils = require('../../MapStore2/web/client/utils/CoordinatesUtils');
-const {LOAD_CANTIERI_AREA_FEATURES, DELETE_CANTIERI_AREA, RESET_CANTIERI_AREAS, UPDATE_ELEMENTI_FEATURES, updateElementiFeatures,
-    /* loadCantieriAreaFeatures,*/ loadCheckedElementi, maxFeaturesExceeded} = require('../actions/cantieri');
+
+const {reprojectGeoJson} = require('../../MapStore2/web/client/utils/CoordinatesUtils');
+const {
+    LOAD_CANTIERI_AREA_FEATURES,
+    DELETE_CANTIERI_AREA,
+    RESET_CANTIERI_AREAS,
+    QUERY_ELEMENTS_FEATURES,
+    ELEMENTS_LAYER,
+    AREAS_LAYER,
+    queryElements,
+    loadCheckedElements// ,
+    // maxFeaturesExceeded
+} = require('../actions/cantieri');
+
 const {getWFSFilterData} = require('../../MapStore2/web/client/epics/wfsquery');
-const {indexOf, startsWith, max, find} = require('lodash');
+const {indexOf, startsWith, max} = require('lodash');
 
 const getWFSFeature = (searchUrl, filterObj) => {
     const data = getWFSFilterData(filterObj);
     return Rx.Observable.defer( () =>
         axios.post(searchUrl + '?service=WFS&outputFormat=json&request=getFeature', data, {
-          timeout: 60000,
+          timeout: 10000,
           headers: {'Accept': 'application/json', 'Content-Type': 'application/xml'}
      }));
 };
 
-const getCantieriAreaLayer = (store) => {
+const getAreasLayer = (store) => {
     let layerState = store.getState().layers;
-    let layer = layerState && layerState.flat && layerState.flat.filter(l => l.id === "cantieri_area_layer")[0];
+    let layer = layerState && layerState.flat && layerState.flat.filter(l => l.id === AREAS_LAYER)[0];
     return layer;
 };
-const getCantieriElementiLayer = (store) => {
+const getElementsLayer = (store) => {
     let layerState = store.getState().layers;
-    let layer = layerState && layerState.flat && layerState.flat.filter(l => l.id === "cantieri_elementi_layer")[0];
+    let layer = layerState && layerState.flat && layerState.flat.filter(l => l.id === ELEMENTS_LAYER)[0];
     return layer;
 };
 const getLayer = (props) => {
@@ -47,8 +60,7 @@ const getLayer = (props) => {
         "visibility": true,
         "crs": props.projection,
         "featuresCrs": props.projection,
-        "style": props.style,
-        "overrideOLStyle": true
+        "style": props.style
     };
 };
 
@@ -59,7 +71,7 @@ const getNewIndex = (features) => {
     }
     return 0;
 };
-const updateCantieriAreaFeatures = (features, layer, operation, store) => {
+const updateAreaFeatures = (features, layer, operation) => {
     let newLayerProps = {};
     let actions = [];
     switch (operation) {
@@ -87,22 +99,13 @@ const updateCantieriAreaFeatures = (features, layer, operation, store) => {
         }
         case "reset": {
             newLayerProps.features = [];
-            actions.push(loadCheckedElementi([]));
-            actions.push(changeLayerProperties("cantieri_elementi_layer", newLayerProps));
+            actions.push(loadCheckedElements([]));
+            actions.push(changeLayerProperties(ELEMENTS_LAYER, newLayerProps));
             break;
         }
         default: return Rx.Observable.empty();
     }
     actions.push(changeLayerProperties(layer.id, newLayerProps));
-    if (layer.id !== "cantieri_elementi_layer") {
-        actions.push(updateElementiFeatures());
-    }
-    if (features.length === store.getState().cantieri.maxFeatures ) {
-        actions.push(maxFeaturesExceeded(true));
-    } else {
-        actions.push(maxFeaturesExceeded(false));
-    }
-
     return Rx.Observable.from(actions);
 };
 
@@ -110,9 +113,9 @@ const createAndAddLayers = (features, store, checkedElementi) => {
     let actions = [];
     let areaOptions = {
         features: features,
-        group: "Cantieri Areas Layer",
-        title: "cantieri_area",
-        id: "cantieri_area_layer",
+        group: "Cantiere",
+        title: "Aree",
+        id: AREAS_LAYER,
         name: "cantieri_area",
         style: {
             type: "MultiPolygon",
@@ -126,30 +129,13 @@ const createAndAddLayers = (features, store, checkedElementi) => {
         },
         projection: store.getState().map.present.projection
     };
-    let highlightOptions = {
-        features: [],
-        group: "Cantieri Highlight Layer",
-        title: "cantieri_highlight",
-        id: "cantieri_highlight_layer",
-        name: "cantieri_highlight",
-        style: {
-            type: "MultiPolygon",
-            stroke: {
-                color: 'yellow',
-                width: 2
-            },
-            fill: {
-                color: [0, 0, 0, 0.2]
-            }
-        },
-        projection: store.getState().map.present.projection
-    };
+
     let elementiOptions = {
         features: [],
-        group: "Cantieri Elementi Layer",
-        title: "cantieri_elementi",
-        id: "cantieri_elementi_layer",
-        name: "cantieri_elementi",
+        group: "Cantiere",
+        title: "Elementi Selezionati",
+        id: ELEMENTS_LAYER,
+        name: "cantiere_elements",
         style: {
             "type": "MultiPolygon",
             "stroke": {
@@ -157,50 +143,30 @@ const createAndAddLayers = (features, store, checkedElementi) => {
                 width: 1
             },
             "fill": {
-                color: [255, 0, 0, 0.5]
+                color: [100, 100, 100, 0.1]
             }
         },
         projection: store.getState().map.present.projection
     };
     actions.push(addLayer(getLayer(elementiOptions)));
     actions.push(addLayer(getLayer(areaOptions)));
-    actions.push(addLayer(getLayer(highlightOptions)));
-    actions.push(updateElementiFeatures());
     actions.push(changeDrawingStatus("cleanAndContinueDrawing", "", "LavoriPubblici", [], {}));
     if (checkedElementi) {
-        actions.push(loadCheckedElementi(checkedElementi));
+        actions.push(loadCheckedElements(checkedElementi));
     }
     return Rx.Observable.from(actions);
 };
-const getFilterObj = (action, operation, store) => {
-    const projection = store.getState().map.present.projection;
-    let geometry = {projection};
-    let areas = [];
-    if (operation === "getAreaGeometryFromClick") {
-        geometry.type = "Point";
-        let point = [action.point.latlng.lng, action.point.latlng.lat];
-        point = CoordinatesUtils.reproject(point, "EPSG:4326", projection);
-        geometry.coordinates = [point.x, point.y]; // TODO FIX THIS AND FILTER UTILS AND TESTS
-    } else if (operation === "aggregate") {
-        let cantieriAreaLayer = getCantieriAreaLayer(store);
-        // take all the coordinates of the areas and create one multipolygon
-        areas = cantieriAreaLayer.features.map(f => f.geometry.coordinates[0]);
-        geometry.type = "MultiPolygon";
-        geometry.coordinates = areas;
-    }
-
+const getSpatialFilter = (geometry, options, operation = "INTERSECTS") => {
     return {
         spatialField: {
-            operation: "INTERSECTS",
+            operation: operation,
             attribute: "GEOMETRY",
             geometry
         },
         "filterType": "OGC",
         "featureTypeName": "CORSO_1:V_ELEMENTI_CANTIERI",
         "ogcVersion": "1.1.0",
-        pagination: {
-            maxFeatures: operation === "aggregate" ? store.getState().cantieri.maxFeatures : null
-        }
+        ...options
     };
 };
 
@@ -210,46 +176,45 @@ const isActiveTool = (tool, store) => {
 };
 
 module.exports = {
-    addOrUpdateCantieriAreaLayerByClick: ( action$, store ) =>
+    updateCantieriByClick: ( action$, store ) =>
         action$.ofType(CLICK_ON_MAP)
             .filter(() => isActiveTool("pointSelection", store))
             .switchMap( (action) => {
-                return getWFSFeature(store.getState().cantieri.geoserverUrl, getFilterObj(action, "getAreaGeometryFromClick", store))
+                const geometry = {
+                    type: "Point",
+                    coordinates: [action.point.latlng.lng, action.point.latlng.lat]
+                };
+                return getWFSFeature(store.getState().cantieri.geoserverUrl, getSpatialFilter(geometry))
                     .switchMap((response) => {
-                        if (response.data && response.data.features && response.data.features.length > 0) {
-                            let featuresByClick = response.data.features.map(f => CoordinatesUtils.reprojectGeoJson(f, "EPSG:4326",
-                                store.getState().map.present.projection));
-                            let areaLayer = getCantieriAreaLayer(store);
-                            if (areaLayer !== undefined) {
-                                let layerFeaturesIds = areaLayer.features.map(f => f.id);
-
-                                // find new features
-                                let featuresToAdd = featuresByClick.filter(f => indexOf(layerFeaturesIds, f.id) === -1);
-                                // find existant features
-                                let featuresToUpdate = featuresByClick.filter(f => indexOf(layerFeaturesIds, f.id) !== -1);
-                                let featuresToUpdateIds = featuresToUpdate.map(f => f.id);
-
-                                let layerFeatures = areaLayer.features.map(f => {
-                                    return featuresToUpdateIds.length > 0 ? find(featuresToUpdate, (el) => el.id === f.id) : f;
+                        if (response.data && response.data.features) {
+                            const elementsLayer = getElementsLayer(store);
+                            let featureByClick = response.data.features
+                                .map(f => reprojectGeoJson(f, "EPSG:4326", store.getState().map.present.projection))
+                                .filter(f => elementsLayer.features.findIndex(f2 => isSameFeature(f, f2)) < 0);
+                            if (elementsLayer !== undefined && featureByClick.length > 0) {
+                                featureByClick = featureByClick.reduce((candidate, cur) => {
+                                    // get the feature with the smaller area (it is usually the wanted one when you click)
+                                    if (candidate) {
+                                        if (cur.geometry.type === "Polygon" || cur.geometry.type === "MultiPolygon") {
+                                            return area(candidate) > area(cur) ? cur : candidate;
+                                        }
+                                    }
+                                    return cur;
                                 });
-
-                                return updateCantieriAreaFeatures(layerFeatures.concat(featuresToAdd), areaLayer, "replace", store);
+                                let layerFeatures = elementsLayer.features.filter(f => f.id !== featureByClick.id);
+                                return updateAreaFeatures(layerFeatures.concat(
+                                    [featureByClick].map(checkFeature)
+                                ), elementsLayer, "replace", store);
                             }
-                            return createAndAddLayers(featuresByClick, store, null);
                         }
                         return Rx.Observable.empty();
-                    })
-                    .catch(() => {
-                        return Rx.Observable.empty();
                     });
-            }).catch(() => {
-                return Rx.Observable.empty();
             }),
-    addOrUpdateCantieriAreaLayer: ( action$, store ) =>
+    updateCantieriAreaLayer: ( action$, store ) =>
         action$.ofType(END_DRAWING)
         .filter((action) => action.owner === "LavoriPubblici")
         .switchMap( (action) => {
-            let layer = getCantieriAreaLayer(store);
+            let layer = getAreasLayer(store);
             let feature = {
                 type: "Feature",
                 geometry: {
@@ -259,64 +224,90 @@ module.exports = {
                 id: "area_0",
                 index: 0
             };
+            const options = {
+                pagination: {
+                    maxFeatures: store.getState().cantieri.maxFeatures
+                }
+            };
+            const f4326 = reprojectGeoJson(feature, store.getState().map.present.projection, "EPSG:4326");
+            const filter = getSpatialFilter(f4326.geometry, options, "WITHIN");
             if (layer !== undefined) {
-                return updateCantieriAreaFeatures([feature], layer, "addAndModify", store);
+                return updateAreaFeatures([feature], layer, "addAndModify", store).concat(Rx.Observable.of(queryElements(filter)));
             }
+
             return createAndAddLayers([feature], store, null);
         }),
     deleteCantieriAreaFeature: ( action$, store ) =>
         action$.ofType(DELETE_CANTIERI_AREA)
         .switchMap( (action) => {
-            let layer = getCantieriAreaLayer(store);
+            let layer = getAreasLayer(store);
             let feature = {
                 type: "Feature",
                 geometry: {},
                 id: action.area
             };
             if (layer !== undefined) {
-                return updateCantieriAreaFeatures([feature], layer, "delete", store);
+                return updateAreaFeatures([feature], layer, "delete", store);
             }
             return Rx.Observable.empty();
         }),
     resetCantieriAreaFeatures: ( action$, store ) =>
         action$.ofType(RESET_CANTIERI_AREAS)
         .switchMap( () => {
-            let layer = getCantieriAreaLayer(store);
+            let layer = getAreasLayer(store);
             if (layer !== undefined) {
-                return updateCantieriAreaFeatures([], layer, "reset", store);
+                return updateAreaFeatures([], layer, "reset", store);
             }
             return Rx.Observable.empty();
         }),
-    updateElementiFeaturesEpic: ( action$, store ) =>
-        action$.ofType(UPDATE_ELEMENTI_FEATURES)
-        .switchMap( () => {
-            let cantieriElementiLayer = getCantieriElementiLayer(store);
-            let cantieriAreaLayer = getCantieriAreaLayer(store);
-            if (cantieriElementiLayer !== undefined && cantieriAreaLayer !== undefined) {
-                return getWFSFeature(store.getState().cantieri.geoserverUrl, getFilterObj(null, "aggregate", store))
+    updateCantieriElementsFeatures: ( action$, store ) =>
+        action$.ofType(QUERY_ELEMENTS_FEATURES)
+        .switchMap( (action) => {
+            let elementsLayer = getElementsLayer(store);
+            if (elementsLayer !== undefined) {
+                return getWFSFeature(store.getState().cantieri.geoserverUrl, action.filter)
                     .switchMap((response) => {
                         if (response.data && response.data.features && response.data.features.length > 0) {
                             let newFeatures = response.data.features.map(f => {
-                                return CoordinatesUtils.reprojectGeoJson(f, "EPSG:4326", store.getState().map.present.projection);
-                            });
-                            return updateCantieriAreaFeatures(newFeatures, cantieriElementiLayer, "replace", store);
+                                return reprojectGeoJson(f, "EPSG:4326", store.getState().map.present.projection);
+                            }).filter(f => elementsLayer.features.findIndex(f2 => isSameFeature(f, f2)) < 0);
+                            return updateAreaFeatures(newFeatures.map(checkFeature), elementsLayer, "add", store);
                         }
-                        return updateCantieriAreaFeatures([], cantieriElementiLayer, "reset", store);
-                    }).catch(() => {
                         return Rx.Observable.empty();
                     });
             }
             return Rx.Observable.empty();
         }),
-    loadCantieriAreaFeaturesEpic: ( action$, store ) =>
+    fetchCantieriAreaFeatures: ( action$, store ) =>
         action$.ofType(LOAD_CANTIERI_AREA_FEATURES)
             .switchMap( (action) => {
                 let newFeatures = action.areaFeatures.map(f => {
-                    return CoordinatesUtils.reprojectGeoJson(f, "EPSG:4326", store.getState().map.present.projection);
+                    return reprojectGeoJson(f, "EPSG:4326", store.getState().map.present.projection);
                 });
                 return createAndAddLayers(newFeatures, store, action.checkedElementi);
-            })/*,
+            }),
+    updateCantieriElementsStyle: ( action$, store ) =>
+        action$.ofType(ROWS_SELECTED, ROWS_DESELECTED).switchMap( action => {
+            {
+                const modifyFeatures = (f) => {
+                    const rowIndex = action.rows.findIndex(r => r.row.key === featureToRow(f).key);
+                    if (rowIndex >= 0) {
+                        if ( action.type === ROWS_SELECTED) {
+                            return checkFeature(f);
+                        }
+                        return uncheckFeature(f);
 
+                    }
+                    return f;
+                };
+                const layer = getElementsLayer(store);
+                let features = layer.features.map(modifyFeatures);
+
+                return Rx.Observable.of(changeLayerProperties(layer.id, {features}));
+            }
+        })
+
+            /*,
     initCantieriPluginEpic: ( action$ ) =>
         action$.ofType(MAP_CONFIG_LOADED)
             .switchMap( () => {

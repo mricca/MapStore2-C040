@@ -77,15 +77,6 @@ const CantieriPanel = React.createClass({
 
         let toolbar = (<div id="dock-toolbar">
             <ButtonToolbar id="left-tools" className="left-tools" bsSize="sm">
-                <ToggleButton id="elementiGrid" glyphicon={this.props.elementiGridGlyph} text={LocaleUtils.getMessageById(this.context.messages, "cantieriGrid.toolbar.elements")} onClick={() => this.props.onActiveGrid("elementiGrid")}
-                    tooltip={null} tooltipPlace={this.props.tooltipPlace} style={null}
-                    btnConfig={{key: "elementiGrid"}} pressed={this.isToolActive("elementiGrid")}/>
-                <ToggleButton id="areasGrid" glyphicon={this.props.areasGridGlyph} text={LocaleUtils.getMessageById(this.context.messages, "cantieriGrid.toolbar.areas")} onClick={() => this.props.onActiveGrid("areasGrid")}
-                    tooltip={null} tooltipPlace={this.props.tooltipPlace} style={null}
-                    btnConfig={{key: "areasGrid"}} pressed={this.isToolActive("areasGrid")}/>
-                {rowsSelectedComp}
-            </ButtonToolbar>
-            <ButtonToolbar id="right-tools" className="right-tools" bsSize="sm">
                 <ToggleButton id={pointSelection} glyphicon={this.props.pointSelectionGlyph}
                     onClick={() => {
                         this.props.onActiveDrawTool(pointSelection);
@@ -104,11 +95,19 @@ const CantieriPanel = React.createClass({
                     }}
                     tooltip={polygonSelectionTooltip} tooltipPlace={this.props.tooltipPlace} style={null}
                     btnConfig={{key: polygonSelection}} pressed={this.isToolActive(polygonSelection)}/>
-
+                {rowsSelectedComp}
                 <Button key="save" value="save" onClick={() => this.props.onSave()}>
                     <Message msgId="cantieriGrid.toolbar.save"/></Button>
                 <Button key="reset" value="reset" onClick={() => this.props.onResetCantieriAreas()}>
                     <Message msgId="cantieriGrid.toolbar.reset"/></Button>
+            </ButtonToolbar>
+            <ButtonToolbar id="right-tools" className="right-tools" bsSize="sm">
+                <ToggleButton id="elementiGrid" glyphicon={this.props.elementiGridGlyph} text={LocaleUtils.getMessageById(this.context.messages, "cantieriGrid.toolbar.elements")} onClick={() => this.props.onActiveGrid("elementiGrid")}
+                    tooltip={null} tooltipPlace={this.props.tooltipPlace} style={null}
+                    btnConfig={{key: "elementiGrid"}} pressed={this.isToolActive("elementiGrid")}/>
+                <ToggleButton id="areasGrid" glyphicon={this.props.areasGridGlyph} text={LocaleUtils.getMessageById(this.context.messages, "cantieriGrid.toolbar.areas")} onClick={() => this.props.onActiveGrid("areasGrid")}
+                    tooltip={null} tooltipPlace={this.props.tooltipPlace} style={null}
+                    btnConfig={{key: "areasGrid"}} pressed={this.isToolActive("areasGrid")}/>
             </ButtonToolbar>
             {this.props.maxFeaturesExceeded ?
                 (<Modal onHide={() => this.props.onHideModal(false)} show={this.props.maxFeaturesExceeded} bsSize="large" container={document.getElementById("body")}>

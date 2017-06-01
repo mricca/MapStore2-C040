@@ -6,23 +6,51 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-const ROWS_SELECTED = "ROWS_SELECTED";
-const ROWS_DESELECTED = "ROWS_DESELECTED";
-const INIT_ELEMENTI_PUBBLICI_PLUGIN = "INIT_ELEMENTI_PUBBLICI_PLUGIN";
+const ROWS_SELECTED = "CANTIERI::ROWS_SELECTED";
+const ROWS_DESELECTED = "CANTIERI::ROWS_DESELECTED";
+const INIT_CANTIERI_PLUGIN = "INIT_CANTIERI_PLUGIN";
 const SET_ACTIVE_GRID = "SET_ACTIVE_GRID";
 const DELETE_CANTIERI_AREA = "DELETE_CANTIERI_AREA";
 const SET_ACTIVE_DRAW_TOOL = "SET_ACTIVE_DRAW_TOOL";
 const RESET_CANTIERI_AREAS = "RESET_CANTIERI_AREAS";
-const UPDATE_ELEMENTI_FEATURES = "UPDATE_ELEMENTI_FEATURES";
+const QUERY_ELEMENTS_FEATURES = "QUERY_ELEMENTS_FEATURES";
 const LOAD_CANTIERI_AREA_FEATURES = "LOAD_CANTIERI_AREA_FEATURES";
-const LOAD_CHECKED_ELEMENTI = "LOAD_CHECKED_ELEMENTI";
+const LOAD_CHECKED_ELEMENTS = "LOAD_CHECKED_ELEMENTS";
 const SAVE_CANTIERI_DATA = "SAVE_CANTIERI_DATA";
 const MAX_FEATURES_EXCEEDED = "MAX_FEATURES_EXCEEDED";
+const AREAS_LAYER = "CANTIERI::AREAS_LAYER";
+const ELEMENTS_LAYER = "CANTIERI::ELEMENTS_LAYER";
 
 /**
  * updates in the state the selected rows
  * @memberof actions.cantieri
- * @return {action} of type `ROWS_SELECTED`
+ * @param {object} row the row.. Something like:
+ * ```
+ *     {
+ *       rowIdx: 0,
+ *       row: {
+ *         id: 22682,
+ *         name: 'EDIFICI',
+ *         key: 'EDIFICI.22682'
+ *       }
+ *     }
+ * ```
+ * @return {action} of type `ROWS_SELECTED`. example:
+ * ```
+ * {
+ *   type: 'CANTIERI::ROWS_SELECTED',
+ *   rows: [
+ *     {
+ *       rowIdx: 0,
+ *       row: {
+ *         id: 26185,
+ *         name: 'EDIFICI',
+ *         key: 'EDIFICI.26185'
+ *       }
+ *     }
+ *   ]
+ * }
+ * ```
  */
 function rowsSelected(rows) {
     return {
@@ -44,11 +72,11 @@ function rowsDeselected(rows) {
 /**
  * initialize the plugin (should be called on componentDidMount)
  * @memberof actions.cantieri
- * @return {action} of type `INIT_ELEMENTI_PUBBLICI_PLUGIN`
+ * @return {action} of type `INIT_CANTIERI_PLUGIN`
  */
 function initPlugin(options) {
     return {
-        type: INIT_ELEMENTI_PUBBLICI_PLUGIN,
+        type: INIT_CANTIERI_PLUGIN,
         options
     };
 }
@@ -87,11 +115,13 @@ function resetCantieriAreas() {
 /**
  * update elementi features
  * @memberof actions.cantieri
- * @return {action} of type `UPDATE_ELEMENTI_FEATURES`
+ * @param {object} filter the filter to use to query the layer
+ * @return {action} of type `QUERY_ELEMENTS_FEATURES`
  */
-function updateElementiFeatures() {
+function queryElements(filter) {
     return {
-        type: UPDATE_ELEMENTI_FEATURES
+        type: QUERY_ELEMENTS_FEATURES,
+        filter
     };
 }
 /**
@@ -108,11 +138,11 @@ function setActiveDrawTool(activeDrawTool) {
 /**
  * load checked elementi
  * @memberof actions.cantieri
- * @return {action} of type `LOAD_CHECKED_ELEMENTI`
+ * @return {action} of type `LOAD_CHECKED_ELEMENTS`
  */
-function loadCheckedElementi(checkedElementi) {
+function loadCheckedElements(checkedElementi) {
     return {
-        type: LOAD_CHECKED_ELEMENTI,
+        type: LOAD_CHECKED_ELEMENTS,
         checkedElementi
     };
 }
@@ -157,14 +187,15 @@ function loadCantieriAreaFeatures() {
 module.exports = {
     ROWS_SELECTED, rowsSelected,
     ROWS_DESELECTED, rowsDeselected,
-    INIT_ELEMENTI_PUBBLICI_PLUGIN, initPlugin,
+    INIT_CANTIERI_PLUGIN, initPlugin,
     SET_ACTIVE_GRID, setActiveGrid,
     DELETE_CANTIERI_AREA, deleteCantieriArea,
     SET_ACTIVE_DRAW_TOOL, setActiveDrawTool,
     RESET_CANTIERI_AREAS, resetCantieriAreas,
-    UPDATE_ELEMENTI_FEATURES, updateElementiFeatures,
-    LOAD_CHECKED_ELEMENTI, loadCheckedElementi,
+    QUERY_ELEMENTS_FEATURES, queryElements,
+    LOAD_CHECKED_ELEMENTS, loadCheckedElements,
     LOAD_CANTIERI_AREA_FEATURES, loadCantieriAreaFeatures,
     MAX_FEATURES_EXCEEDED, maxFeaturesExceeded,
-    SAVE_CANTIERI_DATA, saveCantieriData
+    SAVE_CANTIERI_DATA, saveCantieriData,
+    AREAS_LAYER, ELEMENTS_LAYER
 };

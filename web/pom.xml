@@ -182,13 +182,26 @@
                         <encoding>UTF-8</encoding>
                         <resources>
                             <resource>
-                                <directory>${basedir}/../js</directory>
+                                <directory>${basedir}/../MapStore2/web/client</directory>
                                 <includes>
                                     <include>translations/*</include>
                                 </includes>
                             </resource>
+                        </resources>
+                    </configuration>
+                </execution>
+                <execution>
+                    <id>kicak translations</id>
+                    <phase>process-classes</phase>
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>${basedir}/target/MapStore2/</outputDirectory>
+                        <encoding>UTF-8</encoding>
+                        <resources>
                             <resource>
-                                <directory>${basedir}/../MapStore2/web/client</directory>
+                                <directory>${basedir}/../</directory>
                                 <includes>
                                     <include>translations/*</include>
                                 </includes>

@@ -32,7 +32,7 @@
     </head>
     <body onload="init()">
         <div id="container" class="ms2"></div>
-        <script id="ms2-api" src="http://localhost:8081/dist/ms2-api.js"></script>
+        <script id="ms2-api" src="dist/ms2-api.js"></script>
         <script type="text/javascript">
         function init() {
             /** Configuration of the mapstore2 api.
@@ -45,13 +45,12 @@
             MapStore2.create('container',{
                 plugins: {
                     desktop: [
-                        "Attribution",
                         {
                             "name": "Map",
                             "cfg" :{
                                 "mapType": 'openlayers'
                             }
-                        }, "TOC", "DrawerMenu", "BackgroundSelector",
+                        }, "TOC", "DrawerMenu",
                         {
                             "name": "LavoriPubblici",
                             "cfg": {
@@ -88,8 +87,8 @@
             				"type": "wms",
                             "format": "image/png8",
                             "name": "CORSO_1:V_ELEMENTI_CANTIERI",
-            				"title": "ELEMENTI CANTIERE",
-            				"group": "Cantieri",
+            				"title": "Elementi Esistenti",
+            				"group": "Cantiere",
                             "visibility": true
                         }]
                     }
@@ -108,7 +107,7 @@
                 "maxFeatures": 1000
             };
             MapStore2.triggerAction({
-                type: "INIT_ELEMENTI_PUBBLICI_PLUGIN",
+                type: "INIT_CANTIERI_PLUGIN",
                 options: options
             });
 

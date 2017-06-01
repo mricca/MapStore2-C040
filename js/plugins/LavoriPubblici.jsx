@@ -12,22 +12,21 @@ const {changeMapView} = require('../../MapStore2/web/client/actions/map');
 const {changeDrawingStatus} = require('../../MapStore2/web/client/actions/draw');
 const {dockSizeFeatures} = require('../../MapStore2/web/client/actions/featuregrid');
 const {rowsSelected, rowsDeselected, initPlugin, setActiveGrid, deleteCantieriArea, setActiveDrawTool, resetCantieriAreas,
-saveCantieriData, maxFeaturesExceeded } = require('../actions/cantieri');
+saveCantieriData, maxFeaturesExceeded, ELEMENTS_LAYER, AREAS_LAYER } = require('../actions/cantieri');
 const epics = require('../epics/cantieri');
+const {featureToRow} = require('../utils/CantieriUtils');
 const getAreaLayer = (state) => {
-    return state.layers.flat.filter(l => l.id === "cantieri_area_layer")[0];
+    return state.layers.flat.filter(l => l.id === AREAS_LAYER)[0];
 };
 const getElementiLayer = (state) => {
-    return state.layers.flat.filter(l => l.id === "cantieri_elementi_layer")[0];
+    return state.layers.flat.filter(l => l.id === ELEMENTS_LAYER)[0];
 };
 const ElementiGrid = connect((state) => ({
     minHeight: state.cantieri.elementiGrid.minHeight,
     minWidth: state.cantieri.elementiGrid.minWidth,
-    rows: getElementiLayer(state) ? getElementiLayer(state).features.map((a) => {
-        return {"id": a.properties.ID, "name": a.properties.NOME_LIVELLO};
-    }) : [],
+    rows: getElementiLayer(state) ? getElementiLayer(state).features.map(featureToRow) : [],
     columns: state.cantieri.elementiGrid.columns,
-    selectBy: state.cantieri.elementiGrid.selectBy,
+    selectBy: {isSelectedKey: 'checked'},
     rowSelection: {
         showCheckbox: true
     }
