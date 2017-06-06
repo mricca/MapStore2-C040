@@ -8,8 +8,9 @@
 const Rx = require('rxjs');
 const area = require('@turf/area');
 const {CLICK_ON_MAP} = require('../../MapStore2/web/client/actions/map');
-const {ROWS_SELECTED, ROWS_DESELECTED} = require('../actions/cantieri');
 const {featureToRow, isSameFeature, checkFeature, uncheckFeature} = require('../utils/CantieriUtils');
+const {processOGCSimpleFilterField} = require('../../MapStore2/web/client/utils/FilterUtils');
+const {filter} = require('../../MapStore2/web/client/utils/ogc/WFS/base');
 const axios = require('../../MapStore2/web/client/libs/ajax');
 const {addLayer, changeLayerProperties} = require('../../MapStore2/web/client/actions/layers');
 const {changeDrawingStatus, END_DRAWING} = require('../../MapStore2/web/client/actions/draw');
@@ -22,12 +23,21 @@ const {
     QUERY_ELEMENTS_FEATURES,
     ELEMENTS_LAYER,
     AREAS_LAYER,
+    ROWS_SELECTED,
+    ROWS_DESELECTED,
+    SAVE_CANTIERI_DATA,
+    dataSaved,
+    savingError,
     queryElements,
+    loadCheckedElements,
     maxFeaturesExceeded
 } = require('../actions/cantieri');
 
 const {getWFSFilterData} = require('../../MapStore2/web/client/epics/wfsquery');
-const {indexOf, startsWith, max, slice} = require('lodash');
+const {transaction, describeFeatureType} = require('../../MapStore2/web/client/api/WFST');
+const {getTypeName} = require('../../MapStore2/web/client/utils/ogc/WFS/base');
+const {insert, deleteFeaturesByFilter} = require('../../MapStore2/web/client/utils/ogc/WFST');
+const {indexOf, startsWith, max} = require('lodash');
 
 const getWFSFeature = (searchUrl, filterObj) => {
     const data = getWFSFilterData(filterObj);
@@ -115,15 +125,15 @@ const updateAreaFeatures = (features, layer, operation, store, totalFeatures) =>
     actions.push(changeLayerProperties(layer.id, newLayerProps));
     return Rx.Observable.from(actions);
 };
-
-const createAndAddLayers = (features, store) => {
+var areaCount = 0;
+const createAndAddLayers = (features, store, checkedElements) => {
     let actions = [];
     let areaOptions = {
         features: features,
         group: "Cantiere",
         title: "Aree",
         id: AREAS_LAYER,
-        name: "cantieri_area",
+        name: "CORSO_1:AREE_CANTIERE",
         style: {
             type: "MultiPolygon",
             stroke: {
@@ -228,6 +238,12 @@ module.exports = {
                     type: "MultiPolygon"
                 },
                 id: "area_0",
+                geometry_name: /* selectGeometryName(state) || */"GEOMETRY",
+                properties: {
+                    "ID_ELEMENTO": areaCount++,
+                    "ID_CANTIERE": /* selectCantiereId(state) || */0,
+                    "TIPOLOGIA": /*  selectTipologia(state) || */"cantiere"
+                },
                 index: 0
             };
             const options = {
@@ -290,7 +306,7 @@ module.exports = {
                 let newFeatures = action.areaFeatures.map(f => {
                     return reprojectGeoJson(f, "EPSG:4326", store.getState().map.present.projection);
                 });
-                return createAndAddLayers(newFeatures, store);
+                return createAndAddLayers(newFeatures, store, action.checkedElements);
             }),
     updateCantieriElementsStyle: ( action$, store ) =>
         action$.ofType(ROWS_SELECTED, ROWS_DESELECTED).switchMap( action => {
@@ -311,8 +327,25 @@ module.exports = {
 
                 return Rx.Observable.of(changeLayerProperties(layer.id, {features}));
             }
-        })
-
+        }),
+        saveCantieriAreas: (action$, store) =>
+            action$.ofType(SAVE_CANTIERI_DATA)
+                .throttleTime(2000)
+                .switchMap( (action) =>
+                    Rx.Observable.defer( () => describeFeatureType(store.getState().cantieri.geoserverUrl, getAreasLayer(store).name ) )
+                        .switchMap(describe => transaction(store.getState().cantieri.geoserverUrl,
+                                [
+                                    deleteFeaturesByFilter(
+                                        filter(processOGCSimpleFilterField({attribute: "ID_CANTIERE", type: "number", operator: "=", values: "1"}, "ogc")),
+                                        getTypeName(describe)
+                                    ),
+                                    insert(reprojectGeoJson({type: "FeatureCollection", features: getAreasLayer(store).features}, store.getState().map.present.projection, "EPSG:4326"), describe)
+                                ],
+                                describe
+                            ))
+                        .map(() => dataSaved(action.checkedElements))
+                        // .catch( (e) => Rx.Observable.of(savingError(e)))
+                    )
             /*,
     initCantieriPluginEpic: ( action$ ) =>
         action$.ofType(MAP_CONFIG_LOADED)
