@@ -23,12 +23,11 @@ const {
     ELEMENTS_LAYER,
     AREAS_LAYER,
     queryElements,
-    loadCheckedElements// ,
-    // maxFeaturesExceeded
+    maxFeaturesExceeded
 } = require('../actions/cantieri');
 
 const {getWFSFilterData} = require('../../MapStore2/web/client/epics/wfsquery');
-const {indexOf, startsWith, max} = require('lodash');
+const {indexOf, startsWith, max, slice} = require('lodash');
 
 const getWFSFeature = (searchUrl, filterObj) => {
     const data = getWFSFilterData(filterObj);
@@ -71,7 +70,7 @@ const getNewIndex = (features) => {
     }
     return 0;
 };
-const updateAreaFeatures = (features, layer, operation) => {
+const updateAreaFeatures = (features, layer, operation, store, totalFeatures) => {
     let newLayerProps = {};
     let actions = [];
     switch (operation) {
@@ -99,17 +98,25 @@ const updateAreaFeatures = (features, layer, operation) => {
         }
         case "reset": {
             newLayerProps.features = [];
-            actions.push(loadCheckedElements([]));
             actions.push(changeLayerProperties(ELEMENTS_LAYER, newLayerProps));
             break;
         }
         default: return Rx.Observable.empty();
     }
+    if (totalFeatures > store.getState().cantieri.maxFeatures ) {
+        actions.push(maxFeaturesExceeded(true));
+        let areaLayer = getAreasLayer(store);
+        if (areaLayer !== undefined) {
+            // removing last drawn areas if it too big, restoring previous layer features in elementLayer
+            newLayerProps.features = layer.features;
+            actions.push(changeLayerProperties(areaLayer.id, {features: slice(areaLayer.features, 0, areaLayer.features.length - 1)}));
+        }
+    }
     actions.push(changeLayerProperties(layer.id, newLayerProps));
     return Rx.Observable.from(actions);
 };
 
-const createAndAddLayers = (features, store, checkedElementi) => {
+const createAndAddLayers = (features, store) => {
     let actions = [];
     let areaOptions = {
         features: features,
@@ -150,10 +157,8 @@ const createAndAddLayers = (features, store, checkedElementi) => {
     };
     actions.push(addLayer(getLayer(elementiOptions)));
     actions.push(addLayer(getLayer(areaOptions)));
+    // actions.push(queryElements()); TODO create a filter from the areas to pass to query elements
     actions.push(changeDrawingStatus("cleanAndContinueDrawing", "", "LavoriPubblici", [], {}));
-    if (checkedElementi) {
-        actions.push(loadCheckedElements(checkedElementi));
-    }
     return Rx.Observable.from(actions);
 };
 const getSpatialFilter = (geometry, options, operation = "INTERSECTS") => {
@@ -189,22 +194,23 @@ module.exports = {
                         if (response.data && response.data.features) {
                             const elementsLayer = getElementsLayer(store);
                             let featureByClick = response.data.features
-                                .map(f => reprojectGeoJson(f, "EPSG:4326", store.getState().map.present.projection))
                                 .filter(f => elementsLayer.features.findIndex(f2 => isSameFeature(f, f2)) < 0);
                             if (elementsLayer !== undefined && featureByClick.length > 0) {
                                 featureByClick = featureByClick.reduce((candidate, cur) => {
                                     // get the feature with the smaller area (it is usually the wanted one when you click)
                                     if (candidate) {
                                         if (cur.geometry.type === "Polygon" || cur.geometry.type === "MultiPolygon") {
+                                            // turf miscalculate the area if the coords are not in 4326
                                             return area(candidate) > area(cur) ? cur : candidate;
                                         }
                                     }
                                     return cur;
                                 });
+                                featureByClick = reprojectGeoJson(featureByClick, "EPSG:4326", store.getState().map.present.projection);
                                 let layerFeatures = elementsLayer.features.filter(f => f.id !== featureByClick.id);
                                 return updateAreaFeatures(layerFeatures.concat(
                                     [featureByClick].map(checkFeature)
-                                ), elementsLayer, "replace", store);
+                                ), elementsLayer, "replace", store, response.data.totalFeatures);
                             }
                         }
                         return Rx.Observable.empty();
@@ -232,10 +238,10 @@ module.exports = {
             const f4326 = reprojectGeoJson(feature, store.getState().map.present.projection, "EPSG:4326");
             const filter = getSpatialFilter(f4326.geometry, options, "WITHIN");
             if (layer !== undefined) {
-                return updateAreaFeatures([feature], layer, "addAndModify", store).concat(Rx.Observable.of(queryElements(filter)));
+                return updateAreaFeatures([feature], layer, "addAndModify", store, 0).concat(Rx.Observable.of(queryElements(filter)));
             }
 
-            return createAndAddLayers([feature], store, null);
+            return createAndAddLayers([feature], store);
         }),
     deleteCantieriAreaFeature: ( action$, store ) =>
         action$.ofType(DELETE_CANTIERI_AREA)
@@ -247,7 +253,7 @@ module.exports = {
                 id: action.area
             };
             if (layer !== undefined) {
-                return updateAreaFeatures([feature], layer, "delete", store);
+                return updateAreaFeatures([feature], layer, "delete", store, 0);
             }
             return Rx.Observable.empty();
         }),
@@ -256,7 +262,7 @@ module.exports = {
         .switchMap( () => {
             let layer = getAreasLayer(store);
             if (layer !== undefined) {
-                return updateAreaFeatures([], layer, "reset", store);
+                return updateAreaFeatures([], layer, "reset", store, 0);
             }
             return Rx.Observable.empty();
         }),
@@ -271,7 +277,7 @@ module.exports = {
                             let newFeatures = response.data.features.map(f => {
                                 return reprojectGeoJson(f, "EPSG:4326", store.getState().map.present.projection);
                             }).filter(f => elementsLayer.features.findIndex(f2 => isSameFeature(f, f2)) < 0);
-                            return updateAreaFeatures(newFeatures.map(checkFeature), elementsLayer, "add", store);
+                            return updateAreaFeatures(newFeatures.map(checkFeature), elementsLayer, "add", store, response.data.totalFeatures);
                         }
                         return Rx.Observable.empty();
                     });
@@ -284,7 +290,7 @@ module.exports = {
                 let newFeatures = action.areaFeatures.map(f => {
                     return reprojectGeoJson(f, "EPSG:4326", store.getState().map.present.projection);
                 });
-                return createAndAddLayers(newFeatures, store, action.checkedElementi);
+                return createAndAddLayers(newFeatures, store);
             }),
     updateCantieriElementsStyle: ( action$, store ) =>
         action$.ofType(ROWS_SELECTED, ROWS_DESELECTED).switchMap( action => {
