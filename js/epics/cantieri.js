@@ -10,7 +10,7 @@ const area = require('@turf/area');
 const {CLICK_ON_MAP} = require('../../MapStore2/web/client/actions/map');
 const {featureToRow, isSameFeature, checkFeature, uncheckFeature} = require('../utils/CantieriUtils');
 const {processOGCSimpleFilterField} = require('../../MapStore2/web/client/utils/FilterUtils');
-const {filter} = require('../../MapStore2/web/client/utils/ogc/WFS/base');
+const {filter} = require('../../MapStore2/web/client/utils/ogc/Filter/base');
 const axios = require('../../MapStore2/web/client/libs/ajax');
 const {addLayer, changeLayerProperties} = require('../../MapStore2/web/client/actions/layers');
 const {changeDrawingStatus, END_DRAWING} = require('../../MapStore2/web/client/actions/draw');
@@ -29,15 +29,14 @@ const {
     dataSaved,
     savingError,
     queryElements,
-    loadCheckedElements,
     maxFeaturesExceeded
 } = require('../actions/cantieri');
 
 const {getWFSFilterData} = require('../../MapStore2/web/client/epics/wfsquery');
-const {transaction, describeFeatureType} = require('../../MapStore2/web/client/api/WFST');
+const {transaction, describeFeatureType} = require('../api/WFST');
 const {getTypeName} = require('../../MapStore2/web/client/utils/ogc/WFS/base');
 const {insert, deleteFeaturesByFilter} = require('../../MapStore2/web/client/utils/ogc/WFST');
-const {indexOf, startsWith, max} = require('lodash');
+const {indexOf, startsWith, max, slice} = require('lodash');
 
 const getWFSFeature = (searchUrl, filterObj) => {
     const data = getWFSFilterData(filterObj);
@@ -126,7 +125,7 @@ const updateAreaFeatures = (features, layer, operation, store, totalFeatures) =>
     return Rx.Observable.from(actions);
 };
 var areaCount = 0;
-const createAndAddLayers = (features, store, checkedElements) => {
+const createAndAddLayers = (features, store) => {
     let actions = [];
     let areaOptions = {
         features: features,
@@ -234,8 +233,8 @@ module.exports = {
             let feature = {
                 type: "Feature",
                 geometry: {
-                    coordinates: [action.geometry.coordinates],
-                    type: "MultiPolygon"
+                    coordinates: action.geometry.coordinates,
+                    type: "Polygon"
                 },
                 id: "area_0",
                 geometry_name: /* selectGeometryName(state) || */"GEOMETRY",
@@ -252,9 +251,9 @@ module.exports = {
                 }
             };
             const f4326 = reprojectGeoJson(feature, store.getState().map.present.projection, "EPSG:4326");
-            const filter = getSpatialFilter(f4326.geometry, options, "WITHIN");
+            const f = getSpatialFilter(f4326.geometry, options, "WITHIN");
             if (layer !== undefined) {
-                return updateAreaFeatures([feature], layer, "addAndModify", store, 0).concat(Rx.Observable.of(queryElements(filter)));
+                return updateAreaFeatures([feature], layer, "addAndModify", store, 0).concat(Rx.Observable.of(queryElements(f)));
             }
 
             return createAndAddLayers([feature], store);
@@ -335,16 +334,18 @@ module.exports = {
                     Rx.Observable.defer( () => describeFeatureType(store.getState().cantieri.geoserverUrl, getAreasLayer(store).name ) )
                         .switchMap(describe => transaction(store.getState().cantieri.geoserverUrl,
                                 [
+                                    // SOME PROBLEM ON SERVER SIDE DO NOT ALLOW TO SAVE
                                     deleteFeaturesByFilter(
                                         filter(processOGCSimpleFilterField({attribute: "ID_CANTIERE", type: "number", operator: "=", values: "1"}, "ogc")),
                                         getTypeName(describe)
                                     ),
+                                    // */
                                     insert(reprojectGeoJson({type: "FeatureCollection", features: getAreasLayer(store).features}, store.getState().map.present.projection, "EPSG:4326"), describe)
                                 ],
                                 describe
                             ))
                         .map(() => dataSaved(action.checkedElements))
-                        // .catch( (e) => Rx.Observable.of(savingError(e)))
+                        .catch( (e) => Rx.Observable.of(savingError(e)))
                     )
             /*,
     initCantieriPluginEpic: ( action$ ) =>
