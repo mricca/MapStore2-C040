@@ -114,7 +114,7 @@
                 will update the list of the features in the elementVectorLayer.
               * @prop {object[]} areaFeatures: list of features representing the drawn areas (with blu border)
                     for the moment it accept only MultiPolygon
-              * @prop {any[]} checkedElementi: it contains the ids of the checked elements
+              * @prop {any[]} checkedElements: it contains the ids of the checked elements
             */
             var areaFeatures = [{"type": "Feature", "id": "1212", "geometry": {"type": "MultiPolygon", "coordinates": [[[
                 [8.984225724801172, 44.40639332278217], [8.983152841195215, 44.405749490942], [8.984955285653221, 44.40559619660227]
@@ -122,13 +122,13 @@
                 "ID": 1212,
                 "NOME_LIVELLO": "EDIFICI"
             }}];
-            var checkedElementi = ["1212"];
+            var checkedElements = ["1212"];
             MapStore2.triggerAction({
                 type: "LOAD_CANTIERI_AREA_FEATURES",
                 // areaFeatures: areaFeatures,
                 areaFeatures: [],
-                checkedElementi: []
-                // checkedElementi : checkedElementi
+                checkedElements: []
+                // checkedElements : checkedElements
             });
         }
         </script>
