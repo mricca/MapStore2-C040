@@ -1,5 +1,5 @@
 const checkedStyle = {
-    type: "MultiPolygon",
+    type: "Polygon",
     stroke: {
         color: 'blue',
         width: 1

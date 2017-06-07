@@ -91,7 +91,7 @@
             /**
               * @prop {object[]} areaFeatures: list of features representing the drawn areas (with blu border)
                     for the moment it accept only MultiPolygon
-              * @prop {string[]} checkedElementi: an array containing the checked row elements in the element grid
+              * @prop {string[]} checkedElements: an array containing the checked row elements in the element grid
               * @prop {object} options. the object which intialize the component
             */
             var areaFeatures = [{"type": "Feature", "id": "1212", "geometry": {"type": "MultiPolygon", "coordinates": [[[
@@ -101,7 +101,7 @@
                 "NOME_LIVELLO": "EDIFICI"
             }}];
 
-            var checkedElementi = ["1212"];
+            var checkedElements = ["1212"];
             var options = {
                 "geoserverUrl": "http://vm-linuxgeofetest.comune.genova.it/geoserver-test/ows",
                 "activeTools": ["elementiGrid", "pointSelection"],
@@ -116,7 +116,7 @@
             MapStore2.triggerAction({
                 type: "LOAD_CANTIERI_AREA_FEATURES",
                 areaFeatures: areaFeatures,
-                checkedElementi : checkedElementi
+                checkedElements : checkedElements
             });
         }
         </script>
