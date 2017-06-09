@@ -29,7 +29,14 @@ const Api = {
             }, parsed.query)
         }));
         const body = transaction(operations, featureTypeSchema(describeFeatureType));
-        return axios.post(url, body, assign({headers: { 'Content-Type': 'application/xml'}}, options));
+        return axios.post(url, body, assign({headers: { 'Content-Type': 'application/xml'}}, options))
+            .then( response => {
+                if (typeof response.data === "string") {
+                    if (response.data.indexOf("ExceptionReport") > 0) {
+                        throw response.data;
+                    }
+                }
+            });
     },
     insert: (baseUrl, features, describeFeatureType, options) =>
         Api.transaction(baseUrl, [insert(features, describeFeatureType)], describeFeatureType, options),
