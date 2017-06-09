@@ -23,7 +23,7 @@ const {changeDrawingStatus, END_DRAWING} = require('../../MapStore2/web/client/a
 const {reprojectGeoJson} = require('../../MapStore2/web/client/utils/CoordinatesUtils');
 const {
     ERROR_LOAD_CANTIERI_AREAS, ERROR_RESET_CANTIERI_FEATURES, ERROR_REMOVE_CANTIERI_AREA, FETCH_CANTIERI_FEATURES,
-    REMOVE_CANTIERI_AREA, RESET_CANTIERI_FEATURES, QUERY_ELEMENTS_FEATURES, ELEMENTS_LAYER, AREAS_LAYER, ROWS_SELECTED, ROWS_DESELECTED, SAVE_CANTIERI_DATA, dataSaved, queryElements, ERROR_DRAWING_AREAS, SUCCESS_SAVING
+    REMOVE_CANTIERI_AREA, RESET_CANTIERI_FEATURES, QUERY_ELEMENTS_FEATURES, ELEMENTS_LAYER, AREAS_LAYER, ROWS_SELECTED, ROWS_DESELECTED, SAVE_CANTIERI_DATA, dataSaved, queryElements, ERROR_DRAWING_AREAS, SUCCESS_SAVING, savingData, loadingData
 } = require('../actions/cantieri');
 
 const {getWFSFilterData} = require('../../MapStore2/web/client/epics/wfsquery');
@@ -112,13 +112,12 @@ const createAndAddLayers = (areasFeatures, store, checkedElementsFeatures) => {
 
     // load elements inside areas
     const options = {
-        pagination: {
-            maxFeatures: store.getState().cantieri.maxFeatures
-        },
         "featureTypeName": store.getState().cantieri.elementsLayerName
     };
     let areasGeometry = reprojectGeoJson(getAreasGeometry(areasFeatures), store.getState().map.present.projection);
-    actions.push(queryElements(getSpatialFilter(areasGeometry, options, "WITHIN")));
+    if (areasGeometry.coordinates.length > 0 ) {
+        actions.push(queryElements(getSpatialFilter(areasGeometry, options, "WITHIN")));
+    }
     // updates draw support interaction
     actions.push(changeDrawingStatus("cleanAndContinueDrawing", "", "LavoriPubblici", [], {}));
     return Rx.Observable.from(actions);
@@ -302,7 +301,7 @@ module.exports = {
 
                             }
                             if (response.data.features.length === 0) {
-                                return Rx.Observable.empty();
+                                return Rx.Observable.of([]);
                             }
                             return Rx.Observable.of(error({
                                 uid: ERROR_LOAD_CANTIERI_AREAS,
@@ -322,7 +321,8 @@ module.exports = {
                                 }).then(r => r.data.features))
                 ).concatMap((results) => {
                     return createAndAddLayers(results[0], store, results[1]);
-                })
+                }).startWith(loadingData(true))
+                .concat([loadingData(false)])
                 .catch( () => {
                     return Rx.Observable.of(error({
                         uid: ERROR_LOAD_CANTIERI_AREAS,
@@ -384,6 +384,8 @@ module.exports = {
                         position: "tc"
                     }))
                     .map(() => dataSaved(getCheckedElements(getElementsLayer(store)), cantierState.id, cantierState.typology ))
+                    .startWith(savingData(true))
+                    .concat([savingData(false)])
                     .catch( () => Rx.Observable.of(error({
                         title: "warning",
                         message: "cantieriGrid.notification.errorSavingData",

@@ -1,11 +1,12 @@
 
 const Dock = require('../../MapStore2/web/client/components/misc/DockablePanel');
+const Spinner = require('react-spinkit');
+const Message = require('../../MapStore2/web/client/components/I18N/Message');
 const StyledDiv = require('./StyledDiv');
 const ToggleButton = require('../../MapStore2/web/client/components/buttons/ToggleButton');
 const LocaleUtils = require('../../MapStore2/web/client/utils/LocaleUtils');
 const Modal = require('../../MapStore2/web/client/components/misc/Modal');
 
-const Message = require('../../MapStore2/web/client/components/I18N/Message');
 const React = require('react');
 const {indexOf} = require('lodash');
 const {ButtonToolbar, Button, Tooltip, Alert} = require('react-bootstrap');
@@ -34,6 +35,7 @@ const CantieriPanel = React.createClass({
         position: React.PropTypes.string,
         onResetCantieriFeatures: React.PropTypes.func,
         elementsSelected: React.PropTypes.number,
+        saving: React.PropTypes.bool,
         useDock: React.PropTypes.bool,
         wrappedComponent: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func])
     },
@@ -62,7 +64,8 @@ const CantieriPanel = React.createClass({
                 activeTools: [ "elementsGrid", pointSelection ],
                 inactiveTools: [ "areasGrid", polygonSelection ]
             },
-            useDock: false
+            useDock: false,
+            saving: false
         };
     },
     getStyle(pos) {
@@ -135,7 +138,12 @@ const CantieriPanel = React.createClass({
                     toolbar={toolbar}
                     id="CantieriDockablePanel"
                     style={ this.props.useDock ? null : this.getStyle(this.props.position)}
-                />
+                >
+                <div style="width:100%;position: absolute;z-index: 1000;height:100%;background-color: rgba(255, 255, 255, 0.56);">
+                    <Spinner spinnerName="circle" overrideSpinnerClassName="spinner"/>
+                    <Message msgId="uploader.uploadingFiles"/>
+                </div>
+        </Container>
         );
     },
     isToolActive(tool) {
