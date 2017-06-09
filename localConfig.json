@@ -94,6 +94,17 @@
       "cfg": {
         "wrap": true
       }
+    },{
+        "name": "MetadataExplorer",
+        "cfg": {
+          "wrap": true,
+          "zoomToLayer": false,
+          "initialCatalogURL": {
+            "csw": "/geonetwork/srv/ita/csw",
+            "wms": "/geoserver-test/wms",
+            "wmts": "/geoserver-test/gwc/service/wmts"
+          }
+        }
     },
     {
       "name": "MousePosition",
@@ -236,6 +247,7 @@
     }, {
         "name": "MetadataExplorer",
         "cfg": {
+          "zoomToLayer": false,
           "wrap": true,
           "initialCatalogURL": {
             "csw": "/geonetwork/srv/ita/csw",
