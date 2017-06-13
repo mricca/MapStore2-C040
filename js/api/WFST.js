@@ -36,6 +36,7 @@ const Api = {
                         throw response.data;
                     }
                 }
+                return response;
             });
     },
     insert: (baseUrl, features, describeFeatureType, options) =>

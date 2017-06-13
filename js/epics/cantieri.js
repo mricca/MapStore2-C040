@@ -28,7 +28,7 @@ const {
 const {getWFSFilterData} = require('../../MapStore2/web/client/epics/wfsquery');
 const {transaction, describeFeatureType} = require('../api/WFST');
 const {getTypeName} = require('../../MapStore2/web/client/utils/ogc/WFS/base');
-const {insert, deleteFeaturesByFilter} = require('../../MapStore2/web/client/utils/ogc/WFST');
+const {insert, deleteFeaturesByFilter} = require('../../MapStore2/web/client/utils/ogc/WFST/v1_1_0');
 
 const getWFSFeature = (searchUrl, filterObj) => {
     const data = getWFSFilterData(filterObj);
