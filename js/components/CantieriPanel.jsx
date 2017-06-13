@@ -92,7 +92,7 @@ const CantieriPanel = React.createClass({
     },
     getToggleStyle() {
         if (this.props.position === "right") {
-            return {position: "relative", right: "55px", top: "-12px"};
+            return {position: "relative", right: "52px", top: "-12px"};
         }
         if (this.props.show) {
             return {position: "relative", left: "2px", bottom: "313px"};
