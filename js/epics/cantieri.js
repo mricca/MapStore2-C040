@@ -8,6 +8,7 @@
 const Rx = require('rxjs');
 const {CLICK_ON_MAP} = require('../../MapStore2/web/client/actions/map');
 const requestBuilder = require('../../MapStore2/web/client/utils/ogc/WFS/RequestBuilder');
+const transactionRequestBuilder = require('../../MapStore2/web/client/utils/ogc/WFST/RequestBuilder');
 const {filter, and, property} = requestBuilder({wfsVersion: "1.1.0"});
 const {error, info, success} = require('../../MapStore2/web/client/actions/notifications');
 const {featureToRow, isSameFeature, checkFeature, uncheckFeature, getAreaFilter, isActiveTool,
@@ -27,8 +28,7 @@ const {
 
 const {getWFSFilterData} = require('../../MapStore2/web/client/epics/wfsquery');
 const {transaction, describeFeatureType} = require('../api/WFST');
-const {getTypeName} = require('../../MapStore2/web/client/utils/ogc/WFS/base');
-const {insert, deleteFeaturesByFilter} = require('../../MapStore2/web/client/utils/ogc/WFST/v1_1_0');
+
 
 const getWFSFeature = (searchUrl, filterObj) => {
     const data = getWFSFilterData(filterObj);
@@ -143,7 +143,7 @@ module.exports = {
                             if (elementsLayer !== undefined && featureByClick.length > 0) {
                                 featureByClick = getSmallestFeature(featureByClick);
                                 featureByClick = reprojectGeoJson(featureByClick, "EPSG:4326", store.getState().map.present.projection);
-                                let layerFeatures = elementsLayer.features.filter(f => !isSameFeature(f, featureByClick));
+                                let layerFeatures = elementsLayer.features.filter(f => f.id !== featureByClick.id);
                                 return replaceFeatures(layerFeatures.concat(
                                     [featureByClick].map(checkFeature)
                                 ), elementsLayer);
@@ -383,31 +383,32 @@ module.exports = {
                 .switchMap( () => {
                     const cantierState = store.getState().cantieri;
                     return Rx.Observable.defer( () => describeFeatureType(cantierState.geoserverUrl, getAreasLayer(store).name ) )
-                    .switchMap(describe => transaction(cantierState.geoserverUrl,
+                    .switchMap(describe => {
+                        const {insert, deleteByFilter} = transactionRequestBuilder(describe);
+                        return Rx.Observable.fromPromise(transaction(cantierState.geoserverUrl,
                             [
                                 // SOME PROBLEM ON SERVER SIDE DO NOT ALLOW TO SAVE
-                                deleteFeaturesByFilter(
+                                deleteByFilter(
                                         filter(and(property("ID_CANTIERE").equalTo(cantierState.id), property("TIPOLOGIA").equalTo(cantierState.typology))),
-                                    getTypeName(describe)
                                 ),
-                                insert(reprojectGeoJson({type: "FeatureCollection", features: getAreasLayer(store).features}, store.getState().map.present.projection, "EPSG:4326"), describe)
+                                insert(reprojectGeoJson({type: "FeatureCollection", features: getAreasLayer(store).features}, store.getState().map.present.projection, "EPSG:4326"))
                             ],
                             describe
-                        ))
+                        )).switchMap(() => Rx.Observable.from([
+                            dataSaved(getCheckedElementsFromLayer(getElementsLayer(store)), cantierState.id, cantierState.typology ),
+                            success({
+                                    uid: SUCCESS_SAVING,
+                                    title: "warning",
+                                    message: "cantieriGrid.notification.successSaving",
+                                    action: {
+                                    label: "cantieriGrid.notification.confirm"
+                                },
+                                autoDismiss: 3,
+                                position: "tc"
+                            })]
+                        ));
+                    })
                     .startWith(savingData(true))
-                    .switchMap(() => Rx.Observable.from([
-                        dataSaved(getCheckedElementsFromLayer(getElementsLayer(store)), cantierState.id, cantierState.typology ),
-                        success({
-                                uid: SUCCESS_SAVING,
-                                title: "warning",
-                                message: "cantieriGrid.notification.successSaving",
-                                action: {
-                                label: "cantieriGrid.notification.confirm"
-                            },
-                            autoDismiss: 3,
-                            position: "tc"
-                        })/*,
-                        savingData(false)*/])).concat([savingData(false)])
                     .catch( () => Rx.Observable.of(error({
                         title: "warning",
                         message: "cantieriGrid.notification.errorSavingData",
@@ -416,7 +417,8 @@ module.exports = {
                         },
                         autoDismiss: 3,
                         position: "tr"
-                    })));
+                    })))
+                    .concat([savingData(false)]);
                 }
             )
 };

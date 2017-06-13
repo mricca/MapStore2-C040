@@ -10,7 +10,7 @@ const axios = require('../../MapStore2/web/client/libs/ajax');
 const urlUtil = require('url');
 const assign = require('object-assign');
 
-const {insert, deleteFeaturesByFilter, transaction} = require('../../MapStore2/web/client/utils/ogc/WFST');
+const {deleteFeaturesByFilter, transaction} = require('../../MapStore2/web/client/utils/ogc/WFST');
 const {featureTypeSchema, getTypeName} = require('../../MapStore2/web/client/utils/ogc/WFS/base');
 
 const toData = (response) => {
@@ -39,8 +39,6 @@ const Api = {
                 return response;
             });
     },
-    insert: (baseUrl, features, describeFeatureType, options) =>
-        Api.transaction(baseUrl, [insert(features, describeFeatureType)], describeFeatureType, options),
     /**
      * Simpler version of describeFeatureType, only json format supported
      * @param  {string} baseUrl         Base ows services url
