@@ -24,13 +24,68 @@
         <artifactId>MapStore2-C040-backend</artifactId>
         <version>${project.version}</version>
     </dependency>
+
+    <!-- SiRAC -->
+    <!-- We are using versions 9999 because they are all custom jars to be used as-is -->
+    <dependency>
+        <groupId>it.people.sirac</groupId>
+        <artifactId>sirac-sso-lib</artifactId>
+        <version>9999</version>
+        <scope>system</scope>
+        <systemPath>${project.basedir}/../backend/libs/sirac-sso-lib.jar</systemPath>
+    </dependency>
+    <dependency>
+        <groupId>it.people.sirac</groupId>
+        <artifactId>sirac-lib</artifactId>
+        <version>9999</version>
+        <scope>system</scope>
+        <systemPath>${project.basedir}/../backend/libs/sirac_lib.jar</systemPath>
+    </dependency>
+    <dependency>
+        <groupId>it.people.sirac</groupId>
+        <artifactId>fe-framework</artifactId>
+        <version>9999</version>
+        <scope>system</scope>
+        <systemPath>${project.basedir}/../backend/libs/fe_framework.jar</systemPath>
+    </dependency>
+    <dependency>
+        <groupId>it.people.sirac</groupId>
+        <artifactId>xmlbeans_authdataholder</artifactId>
+        <version>9999</version>
+        <scope>system</scope>
+        <systemPath>${project.basedir}/../backend/libs/xmlbeans_authdataholder.jar</systemPath>
+    </dependency>
+    <dependency>
+        <groupId>it.people.sirac</groupId>
+        <artifactId>xmlbeans_serviceprofile</artifactId>
+        <version>9999</version>
+        <scope>system</scope>
+        <systemPath>${project.basedir}/../backend/libs/xmlbeans_serviceprofile.jar</systemPath>
+    </dependency>
+    <dependency>
+        <groupId>it.people.sirac</groupId>
+        <artifactId>xmlbeans-1.0.3_serviziinfrastrutturali_sirac_b003_authdataholder</artifactId>
+        <version>9999</version>
+        <scope>system</scope>
+        <systemPath>${project.basedir}/../backend/libs/xmlbeans-1.0.3_serviziinfrastrutturali_sirac_b003_authdataholder.jar</systemPath>
+    </dependency>
+
+    <!-- This is very similar to org.apache.taglibs.standard:1.0.6
+         it may be a customization of the JBoss fork  -->
+    <dependency>
+        <groupId>it.people.sirac</groupId>
+        <artifactId>standard_jstl10</artifactId>
+        <version>9999</version>
+        <scope>system</scope>
+        <systemPath>${project.basedir}/../backend/libs/standard_jstl10.jar</systemPath>
+    </dependency>
     <!-- ================================================================ -->
     <!-- GeoStore modules -->
     <!-- ================================================================ -->
     <dependency>
       <groupId>it.geosolutions.geostore</groupId>
       <artifactId>geostore-webapp</artifactId>
-      <version>1.4-SNAPSHOT</version>
+      <version>1.4.1</version>
       <type>war</type>
       <scope>runtime</scope>
     </dependency>
@@ -237,6 +292,22 @@
                         <resources>
                             <resource>
                                 <directory>${basedir}/../MapStore2/web/client/libs/cesium-navigation</directory>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </execution>
+                <execution>
+                    <id>SIRAC libraries</id>
+                    <phase>process-classes</phase>
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>${basedir}/target/MapStore2/WEB-INF/lib</outputDirectory>
+                        <encoding>UTF-8</encoding>
+                        <resources>
+                            <resource>
+                                <directory>${basedir}/../backend/libs</directory>
                             </resource>
                         </resources>
                     </configuration>

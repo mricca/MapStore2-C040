@@ -8,7 +8,7 @@ Clone the repository with the --recursive option to automatically clone submodul
 
 `git clone --recursive git@github.com:geosolutions-it/MapStore2-C040.git`
 
-Install NodeJS, if needed, from [here](https://nodejs.org/en/blog/release/v0.12.7/).
+Install NodeJS, if needed, from [here](https://nodejs.org/en/download/).
 
 Start the development application locally:
 
@@ -17,5 +17,10 @@ Start the development application locally:
 `npm start`
 
 The application runs at `http://localhost:8081` afterwards.
+
+To create a deployable package:
+
+- Download the [keystore key](http://demo.geo-solutions.it/share/comunege/private/sirac/keystore/encryptAuthResponse_Rijndael_256_PBEWithSHAAnd128BitRC4_100.key) in web/src/main/webapp/keystore
+- `build.sh`
 
 Read more on the [wiki](git@github.com:geosolutions-it/MapStore2-C040.git/wiki).
