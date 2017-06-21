@@ -222,7 +222,18 @@
             "alwaysVisible": true
           }
         }
-    }, "Home", "FeatureGrid", {
+    }, "Home", "FeatureGrid", "Notifications", {
+        "name": "WFSDownload",
+        "cfg": {
+          "formats": [
+                  {"name": "csv", "label": "csv"},
+                  {"name": "shape-zip", "label": "shape-zip"},
+                  {"name": "excel", "label": "excel"},
+                  {"name": "excel2007", "label": "excel2007"},
+                  {"name": "dxf-zip", "label": "dxf-zip"}
+          ]
+        }
+      },{
         "name": "TOC",
         "cfg": {
           "activateQueryTool": true,
