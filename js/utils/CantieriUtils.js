@@ -11,7 +11,7 @@ const {changeLayerProperties} = require('../../MapStore2/web/client/actions/laye
 const {info, error} = require('../../MapStore2/web/client/actions/notifications');
 
 const checkedStyle = {
-    type: "Polygon",
+    type: "MultiPolygon",
     stroke: {
         color: 'black',
         lineDash: [2],
@@ -22,7 +22,7 @@ const checkedStyle = {
     }
 };
 const unCheckedStyle = {
-    type: "Polygon",
+    type: "MultiPolygon",
     stroke: {
         color: 'red',
         width: 1
@@ -170,9 +170,12 @@ module.exports = {
         return elementsLayerSelector(store.getState());
     },
     getAreasGeometry: (features) => {
+        const newMultipolygon = features.reduce((p, c) => {
+            return p.concat(c.geometry.coordinates);
+        }, []);
         return {
             type: "MultiPolygon",
-            coordinates: features.map(f => f.geometry.coordinates)
+            coordinates: newMultipolygon
         };
     },
     showQueryElementsError: () => Rx.Observable.of(info({
