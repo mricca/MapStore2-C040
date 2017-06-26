@@ -131,7 +131,7 @@ const CantieriPanel = React.createClass({
         let toolbar = (<div id="dock-toolbar">
 
             <ButtonToolbar id="toggle-tools" className="toggle-tool" bsSize="lg" style={toggleStyle}>
-                <ToggleButton disabled={this.props.loading} pressed={true} id="toggle-cantieri" className="square-button" glyphicon={this.props.show ? toggleGliphiconOpened : toggleGliphiconClosed} style={{ width: "none"}} btnConfig={{className: "square-button"}}
+                <ToggleButton disabled={this.props.loading} pressed id="toggle-cantieri" className="square-button" glyphicon={this.props.show ? toggleGliphiconOpened : toggleGliphiconClosed} style={{ width: "none"}} btnConfig={{className: "square-button"}}
                     onClick={() => { this.props.onToggleGrid(); }}/>
             </ButtonToolbar>
             <ButtonToolbar id="left-tools" className="left-tools" bsSize="sm" style={this.getLeftToolsStyle()}>
