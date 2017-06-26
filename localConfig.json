@@ -4,7 +4,7 @@
   "wmsURL": "/geoserver-test/wms",
   "proxyUrl": {
     "url": "/MapStore2/proxy/?url=",
-    "useCORS": ["http://nominatim.openstreetmap.org", "https://nominatim.openstreetmap.org"]
+    "useCORS": ["http://nominatim.openstreetmap.org", "https://nominatim.openstreetmap.org", "http://mappe.comune.genova.it", "http://vm-linuxgeofetest.comune.genova.it", "http://www.realvista.it/"]
   },
   "bingApiKey": "AhuXBu7ipR1gNbBfXhtUAyCZ6rkC5PkWpxs2MnMRZ1ZupxQfivjLCch22ozKSCAn",
   "translationsPath": ["MapStore2/web/client/translations","translations"],
@@ -531,7 +531,9 @@
         "className": "navbar shadow navbar-home"
       }
     },"ManagerMenu", "Login", "Language"],
-    "maps": [{"name": "Header", "hide": true }, "MapSearch", "CreateNewMap", "Maps", "Footer"],
+    "maps": [{"name": "Header", "hide": true }, "MapSearch", {"name":"CreateNewMap", "cfg": {
+      "allowedRoles": [ "ADMIN"]
+      }}, "Maps", "Footer"],
     "manager": ["Header", "Redirect", "Manager", "Home", "UserManager", "GroupManager", "Footer"]
   }
 }

@@ -10,6 +10,7 @@ const React = require('react');
 require('../../MapStore2/web/client/product/assets/css/viewer.css');
 
 const {connect} = require('react-redux');
+const PropTypes = require('prop-types');
 
 const url = require('url');
 const urlQuery = url.parse(window.location.href, true).query;
@@ -20,22 +21,21 @@ const {resetControls} = require('../../MapStore2/web/client/actions/controls');
 
 const MapViewer = require('../../MapStore2/web/client/containers/MapViewer');
 let oldLocation;
-const MapViewerPage = React.createClass({
-    propTypes: {
-        mode: React.PropTypes.string,
-        params: React.PropTypes.object,
-        loadMapConfig: React.PropTypes.func,
-        reset: React.PropTypes.func,
-        plugins: React.PropTypes.object,
-        location: React.PropTypes.object
-    },
-    getDefaultProps() {
-        return {
-            mode: 'desktop'
-        };
-    },
+class MapViewerPage extends React.Component {
+    static propTypes = {
+        mode: PropTypes.string,
+        match: PropTypes.object,
+        loadMapConfig: PropTypes.func,
+        reset: PropTypes.func,
+        plugins: PropTypes.object,
+        location: PropTypes.object
+    };
+    static defaultProps = {
+        match: {},
+        mode: 'desktop'
+    };
     componentWillMount() {
-        if (this.props.params.mapId && oldLocation !== this.props.location) {
+        if (this.props.match.params.mapId && oldLocation !== this.props.location) {
             oldLocation = this.props.location;
             if (!ConfigUtils.getDefaults().ignoreMobileCss) {
                 if (this.props.mode === 'mobile') {
@@ -44,7 +44,7 @@ const MapViewerPage = React.createClass({
             }
 
             // VMap = require('../components/viewer/Map')(this.props.params.mapType);
-            let mapId = (this.props.params.mapId === '0') ? null : this.props.params.mapId;
+            let mapId = (this.props.match.params.mapId === '0') ? null : this.props.match.params.mapId;
             let config = urlQuery && urlQuery.config || null;
             // if mapId is a string, is the name of the config to load
             try {
@@ -61,14 +61,14 @@ const MapViewerPage = React.createClass({
             this.props.reset();
             this.props.loadMapConfig(configUrl, mapId);
         }
-    },
+    }
     render() {
         return (<MapViewer
             plugins={this.props.plugins}
-            params={this.props.params}
+            params={this.props.match.params}
             />);
     }
-});
+}
 
 module.exports = connect((state) => ({
     mode: (urlQuery.mobile || (state.browser && state.browser.mobile)) ? 'mobile' : 'desktop'

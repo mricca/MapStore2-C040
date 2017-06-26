@@ -6,37 +6,37 @@
  * LICENSE file in the root directory of this source tree.
  */
 const React = require('react');
+const PropTypes = require('prop-types');
 const {connect} = require('react-redux');
 const Page = require('../../MapStore2/web/client/containers/Page');
 const {resetControls} = require('../../MapStore2/web/client/actions/controls');
 const ConfigUtils = require('../../MapStore2/web/client/utils/ConfigUtils');
 
-const Home = React.createClass({
-    propTypes: {
-        name: React.PropTypes.string,
-        mode: React.PropTypes.string,
-        params: React.PropTypes.object,
-        loadMaps: React.PropTypes.func,
-        reset: React.PropTypes.func,
-        plugins: React.PropTypes.object,
-        pluginsConfig: React.PropTypes.object
-    },
-    contextTypes: {
-        router: React.PropTypes.object
-    },
-    getDefaultProps() {
-        return {
-            name: "manager",
-            mode: 'desktop',
-            loadMaps: () => {},
-            reset: () => {},
-            pluginsConfig: {}
-        };
-    },
+class Home extends React.Component {
+    static propTypes = {
+        name: PropTypes.string,
+        mode: PropTypes.string,
+        match: PropTypes.object,
+        loadMaps: PropTypes.func,
+        reset: PropTypes.func,
+        plugins: PropTypes.object,
+        pluginsConfig: PropTypes.object
+    }
+    static contextTypes = {
+        router: PropTypes.object
+    }
+    static defaultProps = {
+        name: "manager",
+        match: {},
+        mode: 'desktop',
+        loadMaps: () => {},
+        reset: () => {},
+        pluginsConfig: {}
+    }
     componentDidMount() {
         this.props.reset();
         this.props.loadMaps(ConfigUtils.getDefaults().geoStoreUrl);
-    },
+    }
     render() {
         let plugins = this.props.pluginsConfig;
         let pagePlugins = {
@@ -53,10 +53,10 @@ const Home = React.createClass({
             pagePluginsConfig={pagePlugins}
             pluginsConfig={pluginsConfig}
             plugins={this.props.plugins}
-            params={this.props.params}
+            params={this.props.match.params}
             />);
     }
-});
+}
 
 module.exports = connect((state) => {
     return {

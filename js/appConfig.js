@@ -57,6 +57,15 @@ module.exports = {
                  },
                  saveAs: {
                      allowedRoles: ["ADMIN"]
+                 },
+                 RefreshLayers: {
+                    enabled: false,
+                    options: {
+                        bbox: true,
+                        search: true,
+                        title: false,
+                        dimensions: false
+                    }
                  }
              },
              "maps": {

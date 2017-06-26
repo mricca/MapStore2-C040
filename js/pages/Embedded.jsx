@@ -6,25 +6,25 @@
  * LICENSE file in the root directory of this source tree.
  */
 const React = require('react');
-
+const PropTypes = require('prop-types');
 const MapViewer = require('./MapViewer');
 
 
-const MapViewerPage = React.createClass({
-    propTypes: {
-        mode: React.PropTypes.string,
-        params: React.PropTypes.object,
-        loadMapConfig: React.PropTypes.func,
-        reset: React.PropTypes.func,
-        plugins: React.PropTypes.object,
-        location: React.PropTypes.object
-    },
+class MapViewerPage extends React.Component {
+    static propTypes = {
+        mode: PropTypes.string,
+        match: PropTypes.object,
+        loadMapConfig: PropTypes.func,
+        reset: PropTypes.func,
+        plugins: PropTypes.object,
+        location: PropTypes.object
+    }
     render() {
         return (<MapViewer
             {...this.props}
             mode="embedded"
             />);
     }
-});
+}
 
 module.exports = MapViewerPage;

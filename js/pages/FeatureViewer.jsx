@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 const React = require('react');
-
+const PropTypes = require('prop-types');
 require('../../MapStore2/web/client/product/assets/css/viewer.css');
 
 const {connect} = require('react-redux');
@@ -17,42 +17,42 @@ const {startFeatureLoader, updateFeatureLoader} = require('../actions/featureloa
 
 const MapViewer = require('../containers/FeatureViewer');
 
-const MapViewerPage = React.createClass({
-    propTypes: {
-        mode: React.PropTypes.string,
-        params: React.PropTypes.object,
-        onMount: React.PropTypes.func,
-        onUpdate: React.PropTypes.func,
-        reset: React.PropTypes.func,
-        plugins: React.PropTypes.object
-    },
-    getDefaultProps() {
-        return {
-            mode: 'featureviewer',
-            onMount: () => {},
-            onUpdate: () => {}
-        };
-    },
+class MapViewerPage extends React.Component{
+    static propTypes = {
+        mode: PropTypes.string,
+        match: PropTypes.object,
+        onMount: PropTypes.func,
+        onUpdate: PropTypes.func,
+        reset: PropTypes.func,
+        plugins: PropTypes.object
+    }
+    static defaultProps = {
+        mode: 'featureviewer',
+        match: {},
+        onMount: () => {},
+        onUpdate: () => {}
+    };
+
     componentWillMount() {
-        this.props.onMount(ConfigUtils.getConfigProp("wmsURL"), this.props.params, "config.json");
+        this.props.onMount(ConfigUtils.getConfigProp("wmsURL"), this.props.match.params, "config.json");
         if (!ConfigUtils.getDefaults().ignoreMobileCss) {
             if (this.props.mode === 'mobile') {
                 require('../../MapStore2/web/client/product/assets/css/mobile.css');
             }
         }
-    },
+    }
     componentDidUpdate(prevProps) {
-        if (this.props.params !== prevProps.params) {
-            this.props.onUpdate(prevProps, this.props.params, ConfigUtils.getConfigProp("wmsURL"));
+        if (this.props.match.params !== prevProps.params) {
+            this.props.onUpdate(prevProps, this.props.match.params, ConfigUtils.getConfigProp("wmsURL"));
         }
-    },
+    }
     render() {
         return (<MapViewer
             mode={this.props.mode}
             plugins={this.props.plugins}
             />);
     }
-});
+}
 
 module.exports = connect(() => ({
 }),

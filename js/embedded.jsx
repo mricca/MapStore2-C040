@@ -23,6 +23,7 @@ const startApp = () => {
     }));
     const StandardRouter = connect(routerSelector)(require('../MapStore2/web/client/components/app/StandardRouter'));
     const appStore = require('../MapStore2/web/client/stores/StandardStore').bind(null, initialState, {
+        mode: (state = 'embedded') => state,
         maps: require('../MapStore2/web/client/reducers/maps'),
         security: require('../MapStore2/web/client/reducers/security')
     }, {
@@ -38,7 +39,7 @@ const startApp = () => {
         printingEnabled
     };
     ReactDOM.render(
-        <StandardApp {...appConfig}/>,
+        <StandardApp {...appConfig} mode="embedded"/>,
         document.getElementById('container')
     );
 };
