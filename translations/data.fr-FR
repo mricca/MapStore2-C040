@@ -1,6 +1,9 @@
 {
     "locale": "fr-FR",
     "messages": {
+        "search": {
+            "s_priority_info": "Utilisé pour trier les résultats de recherche, des valeurs plus élevées en premier. Les services par défaut ont priorité 5 et 6"
+        },
         "cantieriGrid": {
             "toolbar": {
                 "save": "Soumettre",

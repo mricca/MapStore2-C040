@@ -118,7 +118,7 @@
         "searchOptions": {
           "services": [{
               "type": "wfs",
-              "priority": 2,
+              "priority": 6,
               "displayName": "${properties.NOMEVIA}",
               "subTitle": " (seleziona per cercare numero civico)",
               "options": {
@@ -149,6 +149,7 @@
           }, {
               "type": "nominatim",
               "searchTextTemplate": "${properties.display_name}",
+              "priority": 5,
               "options": {
                 "polygon_geojson": 1,
                 "limit": 3
@@ -272,7 +273,7 @@
           "searchOptions": {
             "services": [{
                 "type": "wfs",
-                "priority": 2,
+                "priority": 6,
                 "displayName": "${properties.NOMEVIA}",
                 "subTitle": " (seleziona per cercare numero civico)",
                 "options": {
@@ -306,6 +307,7 @@
             }, {
                 "type": "nominatim",
                 "searchTextTemplate": "${properties.display_name}",
+                "priority": 5,
                 "options": {
                   "polygon_geojson": 1,
                   "limit": 3

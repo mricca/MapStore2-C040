@@ -1,6 +1,9 @@
 {
     "locale": "en-US",
     "messages": {
+        "search": {
+            "s_priority_info": "Used to sort search results, higher values first. Default services has priority 5 and 6"
+        },
         "cantieriGrid": {
             "toolbar": {
                 "save": "Save",
