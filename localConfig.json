@@ -15,7 +15,7 @@
   "authenticationRules": [
     {
       "urlPattern": ".*geostore.*",
-      "method": "basic"
+      "method": "bearer"
     }, {
       "urlPattern": "\\/geoserver.*",
       "method": "authkey"
