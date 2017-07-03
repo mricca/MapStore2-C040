@@ -68,8 +68,11 @@ module.exports = {
                     }
                  }
              },
-             "maps": {
-                     "mapType": "leaflet"
+             maps: {
+                     mapType: "openlayers"
+             },
+             maptype: {
+                     mapType: "openlayers"
              },
              catalog: {
                  format: "wms",
@@ -80,10 +83,10 @@ module.exports = {
              mapInfo: {enabled: true, infoFormat: 'text/html' },
              mousePosition: {enabled: true, crs: "EPSG:4326", showCenter: true},
              "maps": {
-                     "mapType": "leaflet"
+                     "mapType": "openlayers"
              },
-             "home": {
-                     "mapType": "leaflet"
+             "maptype": {
+                     "mapType": "openlayers"
              },
              catalog: {
                  format: "wms",
