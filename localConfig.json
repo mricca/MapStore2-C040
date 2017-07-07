@@ -258,6 +258,11 @@
         "name": "TOC",
         "cfg": {
           "activateQueryTool": true,
+          "spatialMethodOptions": [
+                  {"id": "BBOX", "name": "queryform.spatialfilter.methods.box"},
+                  {"id": "Circle", "name": "queryform.spatialfilter.methods.circle"},
+                  {"id": "Polygon", "name": "queryform.spatialfilter.methods.poly"}
+              ],
           "layerOptions": {
             "legendOptions": {
               "legendContainerStyle": {
@@ -275,8 +280,7 @@
         "cfg": {
           "presetList": {
             "openlayers_tutorial": [{
-                "title": "Welcome",
-                "text": "my intro text",
+                "translation": "intro",
                 "selector": "#intro-tutorial"
               },
               {
@@ -320,7 +324,16 @@
         }
       },
       "Measure",
-      "Print", "ShapeFile", {
+      {
+        "name": "Print",
+        "cfg": {
+           "useFixedScales": true,
+           "mapPreviewOptions": {
+             "enableScalebox": true,
+             "enableRefresh": false
+           }
+         }
+      }, "ShapeFile", {
         "name": "Settings",
         "cfg": {
           "wrap": true

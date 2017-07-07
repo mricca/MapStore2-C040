@@ -30,6 +30,44 @@
                 "errorSavingData": "c'è stato un errore durante il salvataggio",
                 "successSaving": "I dati sono stati salvati correttamente."
             }
+        },
+        "tutorial": {
+            "intro": {
+                "title": "Benvenuto su MapStore2",
+                "text": "Fai un breve tour delle funzionalità della mappa cliccando su \"Avanti\". Spunta la checkbox sotto per evitare di visualizzare questo messaggio tutte le volte che apri una mappa. Il tutorial è comunque accessibile dal menu in alto a destra."
+            },
+            "drawerMenu": {
+                "title": "Menu principale",
+                "text": "Da questo menu puoi trovare informazioni e strumenti per controllare i layer"
+            },
+            "searchBar": {
+                "title": "Barra di ricerca",
+                "text": "Qui puoi scrivere un indirizzo di un luogo per trovarlo. esempio:  'Via Garibaldi'. Puoi anche digitare le coordinate in questo formato: 43.87,10.20"
+            },
+            "home": {
+                "title": "Home",
+                "text": "Da questo pulsante puoi tornare alla home page dell'applicazione"
+            },
+            "searchButton": {
+                "title": "Ricerca",
+                "text": "Cliccando su questo pulsante si può aprire la barra per cercare tramite indirizzo."
+            },
+            "burgerMenu": {
+                "title": "Menu delle opzioni",
+                "text": "In questo menu puoi trovare opzioni, impostazioni e aiuti"
+            },
+            "fullscreen": {
+                "title": "Schermo Intero",
+                "text": "Cliccando su questo pulsante puoi passare alla modalità di visualizzazione a schermo intero"
+            },
+            "identifyButton": {
+                "title": "Info",
+                "text": "Premendo questo pulsante si attiva lo strumento di \"Map Info\". Cliccando sulla mappa con lo strumento attivato si possono ottenere informazioni riguardanti il punto cliccato."
+            },
+            "introCesium": {
+                "title": "Tutorial visualizzatore 3D",
+                "text": "Fai un breve tour delle funzionalità della mappa 3D cliccando su Avanti. Spunta la checkbox sotto per evitare di visualizzare questo messaggio tutte le volte che apri una mappa."
+            }
         }
     }
 }

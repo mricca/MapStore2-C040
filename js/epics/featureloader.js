@@ -12,7 +12,7 @@ const {configureMap, configureError} = require('../../MapStore2/web/client/actio
 const {addLayer, removeLayer} = require('../../MapStore2/web/client/actions/layers');
 const Rx = require('rxjs');
 const axios = require('../../MapStore2/web/client/libs/ajax');
-const extent = require('turf-extent');
+const bbox = require('@turf/bbox');
 
 const WMS_ID = "FEATURE_SELECTOR_WMS";
 const WFS_ID = "FEATURE_SELECTOR_WFS";
@@ -59,7 +59,7 @@ module.exports = {
                                                     },
                                                     features: res.data.features
                                                 }),
-                                                zoomToExtent(extent(res.data), "EPSG:4326")])
+                                                zoomToExtent(bbox(res.data), "EPSG:4326")])
                                         )
                                     )
                                 )
