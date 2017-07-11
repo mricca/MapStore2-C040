@@ -76,7 +76,7 @@
 
     <context-param>
         <param-name>people.sirac.error.returnURL</param-name>
-        <param-value>http://vm-linuxgeofetest.comune.genova.it/MapStore2_sirac</param-value>
+        <param-value>http://vm-linuxgeofetest.comune.genova.it/MapStore2</param-value>
     </context-param>
 
     <context-param>
