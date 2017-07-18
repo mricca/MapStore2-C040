@@ -86,7 +86,14 @@
             "alwaysVisible": true
           }
         }
-      }, "Home", "TOC", {
+      }, "Home",
+      {
+        "name":"TOC",
+        "cfg":{
+          "refreshMapEnabled": false,
+          "activateRefreshTool": false
+        }
+      }, {
         "name": "Tutorial",
         "cfg": {
           "preset": "default_mobile_tutorial"
@@ -258,6 +265,8 @@
         "name": "TOC",
         "cfg": {
           "activateQueryTool": true,
+          "refreshMapEnabled": false,
+          "activateRefreshTool": false,
           "spatialMethodOptions": [
                   {"id": "BBOX", "name": "queryform.spatialfilter.methods.box"},
                   {"id": "Circle", "name": "queryform.spatialfilter.methods.circle"},
