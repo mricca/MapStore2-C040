@@ -36,6 +36,7 @@ module.exports = {
      pluginsDef: require('./plugins.js'),
      initialState: {
          defaultState: {
+             mapInfo: {infoFormat: 'text/html'},
              mousePosition: {enabled: true, "crs": "EPSG:4326"},
              controls: {
                  styler: {
