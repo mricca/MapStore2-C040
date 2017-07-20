@@ -104,7 +104,10 @@
       }, {
         "name": "Settings",
         "cfg": {
-          "wrap": true
+          "wrap": true,
+          "overrideSettings": {
+             "language": false
+          }
         }
       }, {
         "name": "MetadataExplorer",
@@ -348,7 +351,10 @@
       }, "ShapeFile", {
         "name": "Settings",
         "cfg": {
-          "wrap": true
+          "wrap": true,
+          "overrideSettings": {
+             "language": false
+          }
         }
       }, {
         "name": "MetadataExplorer",
@@ -513,7 +519,10 @@
       }, "TOC", {
         "name": "Settings",
         "cfg": {
-          "wrap": true
+          "wrap": true,
+          "overrideSettings": {
+             "language": false
+          }
         }
       }, {
         "name": "Search",
@@ -626,7 +635,7 @@
       "cfg": {
         "className": "navbar shadow navbar-home"
       }
-    }, "ManagerMenu", "Login", "Language"],
+    }, "ManagerMenu", "Login"],
     "maps": [{
         "name": "Header",
         "hide": true
