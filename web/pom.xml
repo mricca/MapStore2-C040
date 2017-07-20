@@ -266,7 +266,7 @@
                     </configuration>
                 </execution>
                 <execution>
-                    <id>kicak translations</id>
+                    <id>Genova App translations</id>
                     <phase>process-classes</phase>
                     <goals>
                         <goal>copy-resources</goal>
