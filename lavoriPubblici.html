@@ -111,7 +111,7 @@
             				"group": "background",
                             "visibility": false
                         }, {
-                            "url": "/geoserver-test/ows",
+                            "url": "/geoserver/ows",
             				"type": "wms",
                             "format": "image/png8",
                             "name": "CORSO_1:V_ELEMENTI_CANTIERI",
@@ -142,7 +142,7 @@
             var id = parseInt(document.getElementById("ID_CANTIERE").value) || 0;
             var typology = document.getElementById("TIPOLOGIA").value || "cantiere";
             var options = {
-                "geoserverUrl": "/geoserver-test/ows",
+                "geoserverUrl": "/geoserver/ows",
                 "toolbar": {
                     "activeTools": ["elementsGrid", "pointSelection"],
                     "inactiveTools": ["areasGrid", "polygonSelection"]
