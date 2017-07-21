@@ -17,10 +17,8 @@
     "method": "bearer"
   }, {
     "urlPattern": "\\/geoserver.*",
-    "method": {
-          "method": "authkey-param",
-          "param": "ms2-authkey"
-     }
+    "authkeyParamName": "ms2-authkey",
+    "method": "authkey"
   }],
   "defaultMapOptions": {
     "cesium": {
