@@ -1,7 +1,7 @@
 {
   "geoStoreUrl": "rest/geostore/",
-  "printUrl": "/geoserver/pdf/info.json",
-  "wmsURL": "/geoserver/wms",
+  "printUrl": "/geoserver-test/pdf/info.json",
+  "wmsURL": "/geoserver-test/wms",
   "proxyUrl": {
     "url": "/MapStore2/proxy/?url=",
     "useCORS": ["http://nominatim.openstreetmap.org", "https://nominatim.openstreetmap.org", "http://mappe.comune.genova.it", "http://vm-linuxgeofetest.comune.genova.it", "http://www.realvista.it/"]
@@ -31,6 +31,36 @@
         "type": "cesium",
         "url": "https://assets.agi.com/stk-terrain/world",
         "requestVertexNormals": true
+      }
+    }
+  },
+  "initialState": {
+    "defaultState": {
+      "catalog":{
+        "default": {
+          "newService": {
+              "url": "",
+              "type": "wms",
+              "title": "",
+              "isNew": true,
+              "autoload": false
+          },
+          "selectedService": "GeoPortale Comune di Genova",
+          "services": {
+            "GeoPortale Comune di Genova": {
+              "url": "/geoserver-test/csw",
+              "type": "csw",
+              "title": "GeoPortale Comune di Genova",
+              "autoload": true
+            }
+          }
+        },
+        "newService": {
+            "title": "",
+            "type": "wms",
+            "url": "",
+            "autoload": false
+        }
       }
     }
   },
@@ -111,12 +141,7 @@
         "name": "MetadataExplorer",
         "cfg": {
           "wrap": true,
-          "zoomToLayer": false,
-          "initialCatalogURL": {
-            "csw": "/geonetwork/srv/ita/csw",
-            "wms": "/geoserver/wms",
-            "wmts": "/geoserver/gwc/service/wmts"
-          }
+          "zoomToLayer": false
         }
       },
       {
@@ -135,7 +160,7 @@
               "displayName": "${properties.NOMEVIA}",
               "subTitle": " (seleziona per cercare numero civico)",
               "options": {
-                "url": "/geoserver/wfs",
+                "url": "/geoserver-test/wfs",
                 "typeName": "SITGEO:V_ASTE_STRADALI_TOPONIMO_SUB",
                 "queriableAttributes": ["NOMEVIA"],
                 "sortBy": "ID",
@@ -152,7 +177,7 @@
                 "searchTextTemplate": "${properties.TESTO}",
                 "options": {
                   "staticFilter": " AND COD_STRADA = '${properties.COD_STRADA}'",
-                  "url": "/geoserver/wfs",
+                  "url": "/geoserver-test/wfs",
                   "typeName": "SITGEO:CIVICI_COD_TOPON",
                   "queriableAttributes": ["TESTO"],
                   "srsName": "EPSG:4326",
@@ -238,7 +263,7 @@
         }
       },
       "Home",
-      "FeatureGrid",
+      "FeatureEditor",
       "Notifications",
       {
         "name": "WFSDownload",
@@ -358,12 +383,7 @@
         "name": "MetadataExplorer",
         "cfg": {
           "zoomToLayer": false,
-          "wrap": true,
-          "initialCatalogURL": {
-            "csw": "/geonetwork/srv/ita/csw",
-            "wms": "/geoserver/wms",
-            "wmts": "/geoserver/gwc/service/wmts"
-          }
+          "wrap": true
         }
       }, "MousePosition", {
         "name": "Search",
@@ -375,7 +395,7 @@
               "displayName": "${properties.NOMEVIA}",
               "subTitle": " (seleziona per cercare numero civico)",
               "options": {
-                "url": "/geoserver/wfs",
+                "url": "/geoserver-test/wfs",
                 "typeName": "SITGEO:V_ASTE_STRADALI_TOPONIMO_SUB",
                 "queriableAttributes": ["NOMEVIA"],
                 "sortBy": "ID",
@@ -394,7 +414,7 @@
                 "options": {
                   "staticFilter": " AND COD_STRADA = '${properties.COD_STRADA}'",
                   "sortBy": "NUMERO",
-                  "url": "/geoserver/wfs",
+                  "url": "/geoserver-test/wfs",
                   "typeName": "SITGEO:CIVICI_COD_TOPON",
                   "queriableAttributes": ["TESTO"],
                   "srsName": "EPSG:4326",
@@ -587,7 +607,7 @@
             "alwaysVisible": true
           }
         }
-      }, "FeatureGrid", {
+      }, "FeatureEditor", {
         "name": "Toolbar",
         "id": "NavigationBar",
         "cfg": {
