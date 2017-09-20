@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2017, GeoSolutions Sas.
  * All rights reserved.
  *
@@ -12,6 +12,10 @@ module.exports = {
          name: "home",
          path: "/",
          component: require('./pages/Home')
+     }, {
+         name: "llpp",
+         path: "/llpp/:typology/:idCantiere",
+         component: require('./pages/Cantieri')
      }, {
          name: "viewer",
          path: "/viewer",
