@@ -41,7 +41,7 @@ module.exports = {
      initialState: {
          defaultState: {
              mapInfo: {infoFormat: 'text/html'},
-             mousePosition: {enabled: true, "crs": "EPSG:4326"},
+             mousePosition: {enabled: false, "crs": "EPSG:4326"},
              controls: {
                  styler: {
                      enabled: true
@@ -86,7 +86,7 @@ module.exports = {
          },
          mobile: {
              mapInfo: {enabled: true, infoFormat: 'text/html' },
-             mousePosition: {enabled: true, crs: "EPSG:4326", showCenter: true},
+             mousePosition: {enabled: false, crs: "EPSG:4326", showCenter: true},
              "maps": {
                      "mapType": "openlayers"
              },
