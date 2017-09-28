@@ -44,13 +44,13 @@ class Cantieri extends React.Component {
         var id = this.props.match.params.idCantiere || 0;
         var typology = this.props.match.params.typology || "cantiere";
 
-        axios.get("js/llppConfig.json").then(res => {
+        axios.get("configs/llppConfig.json").then(res => {
             let options = assign({}, res.data, {
                 id,
                 typology
             });
             this.props.initPlugin(options);
-            this.props.loadMapConfig("js/cantieriMapConfig.json", null);
+            this.props.loadMapConfig("configs/cantieriMapConfig.json", null);
         });
 
 

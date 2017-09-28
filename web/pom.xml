@@ -231,6 +231,22 @@
                     </configuration>
                 </execution>
                 <execution>
+                    <id>configs</id>
+                    <phase>process-classes</phase>
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>${basedir}/target/MapStore2/configs</outputDirectory>
+                        <encoding>UTF-8</encoding>
+                        <resources>
+                            <resource>
+                                <directory>${basedir}/../configs</directory>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </execution>
+                <execution>
                     <id>CSS files</id>
                     <phase>process-classes</phase>
                     <goals>
