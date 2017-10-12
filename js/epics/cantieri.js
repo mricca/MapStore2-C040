@@ -30,7 +30,7 @@ const {
     errorSavingData, successSavingData, errorSavingElements, infoNoFeaturesSelected, infoElementAlreadyPresent,
     errorRemoveFeature, errorResetCantieriFeatures, errorDrawingAreas, errorLoadCantieriAreas
 } = require('../actions/notifications');
-const { setControlProperty } = require('../../MapStore2/web/client/actions/controls');
+
 const { MAP_CONFIG_LOADED } = require('../../MapStore2/web/client/actions/config');
 const { changeMousePositionState } = require('../../MapStore2/web/client/actions/mousePosition');
 const {serviceRESTUrlSelector} = require('../selector/cantieri');
