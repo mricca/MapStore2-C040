@@ -16,6 +16,7 @@ const AddressesItem = require('./combobox/AddressesItem');
 class AddressesEditor extends AttributeEditor {
     static propTypes = {
         column: PropTypes.object,
+        filterProps: PropTypes.object,
         dataType: PropTypes.string,
         defaultOption: PropTypes.string,
         forceSelection: PropTypes.bool,
@@ -30,6 +31,12 @@ class AddressesEditor extends AttributeEditor {
     static defaultProps = {
         isValid: () => true,
         dataType: "string",
+        filterProps: {
+            typeName: "SITGEO:CIVICI_COD_TOPON",
+            predicate: "ILIKE",
+            blacklist: ["via", "piazza", "viale"]
+        },
+        valueField: "CODICE_CONTROLLO",
         values: [],
         forceSelection: true,
         itemComponent: AddressesItem,

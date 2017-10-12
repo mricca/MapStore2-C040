@@ -296,7 +296,20 @@
           }
         }
       },
-      "Home", "FeatureEditor", {
+      "Home", {
+          "name": "FeatureEditor",
+          "cfg": {
+            "customEditorsOptions": {
+              "rules": [{
+                "regex": {
+                  "attribute": "INDIRIZZO",
+                  "typeName": "V_SOCIOSANITARIE"
+                },
+                "editor": "AddressesEditor"
+              }]
+            }
+          }
+        }, {
         "name": "QueryPanel",
         "cfg": {
             "activateQueryTool": true,
