@@ -9,6 +9,11 @@ const streamEnhancer = mapPropsStream(props$ => {
     });
     return fetcherStream.combineLatest(props$, (data, props) => ({
         data: isArray(data && data.fetchedData && data.fetchedData.values) ? data.fetchedData.values : [],
+        valuesCount: data && data.fetchedData && data.fetchedData.size,
+        currentPage: props && props.currentPage,
+        maxFeatures: props && props.maxFeatures,
+        loadNextPage: props && props.loadNextPage,
+        loadPrevPage: props && props.loadPrevPage,
         select: props && props.select,
         focus: props && props.focus,
         toggle: props && props.toggle,
@@ -82,6 +87,22 @@ const addStateHandlers = compose(
         toggle: (state) => () => ({
             ...state,
             open: state.changingPage ? true : !state.open
+        }),
+        loadNextPage: (state) => () => ({
+            ...state,
+            currentPage: state.currentPage + 1,
+            performFetch: true,
+            changingPage: true,
+            delayDebounce: 0,
+            value: state.value
+        }),
+        loadPrevPage: (state) => () => ({
+            ...state,
+            currentPage: state.currentPage - 1,
+            performFetch: true,
+            changingPage: true,
+            delayDebounce: 0,
+            value: state.value
         })
     })
 );
