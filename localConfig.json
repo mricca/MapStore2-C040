@@ -305,9 +305,21 @@
                   "attribute": "INDIRIZZO",
                   "typeName": "V_SOCIOSANITARIE"
                 },
-                "editor": "AddressesEditor"
+                "editor": "AddressesEditor",
+                "editorProps": {
+                  "filterProps":{
+                    "blacklist": ["via", "piazza", "viale"],
+                    "maxFeatures": 3,
+                    "queriableAttributes": ["DESVIA"],
+                    "predicate": "ILIKE",
+                    "typeName": "SITGEO:CIVICI_COD_TOPON",
+                    "valueField": "CODICE_CONTROLLO",
+                    "returnFullData": true
+                  }
+                }
               }]
-            }
+            },
+            "editingAllowedRoles": ["ADMIN", "USER"]
           }
         }, {
         "name": "QueryPanel",

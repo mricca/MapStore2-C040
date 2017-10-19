@@ -77,7 +77,7 @@ const createAddresses = (props$) => props$
                 blacklist: p.filterProps && p.filterProps.blacklist || [],
                 maxFeatures: p.filterProps && p.filterProps.maxFeatures || 3,
                 queriableAttributes: p.filterProps && p.filterProps.queriableAttributes || [],
-                returnFullResponse: p.filterProps && p.filterProps.returnFullResponse,
+                returnFullData: p.filterProps && p.filterProps.returnFullData,
                 startIndex: ((p.currentPage || 1) - 1) * p.filterProps && p.filterProps.maxFeatures || 3,
                 outputFormat: "application/json",
                 staticFilter: "",

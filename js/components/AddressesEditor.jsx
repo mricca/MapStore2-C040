@@ -41,7 +41,7 @@ class AddressesEditor extends AttributeEditor {
             queriableAttributes: ["DESVIA"],
             typeName: "SITGEO:CIVICI_COD_TOPON",
             valueField: "CODICE_CONTROLLO",
-            returnFullResponse: true
+            returnFullData: true
         },
         filter: "contains",
         values: [],
