@@ -29,14 +29,21 @@ class AddressesEditor extends AttributeEditor {
         values: PropTypes.array
     };
     static defaultProps = {
-        isValid: () => true,
+        isValid: (v) => {
+            const regControlCode = /(\d?[a-zA-Z]?\d){10}/g;
+            return regControlCode.test(v);
+        },
         dataType: "string",
         filterProps: {
-            typeName: "SITGEO:CIVICI_COD_TOPON",
+            blacklist: ["via", "piazza", "viale"],
+            maxFeatures: 5,
             predicate: "ILIKE",
-            blacklist: ["via", "piazza", "viale"]
+            queriableAttributes: ["DESVIA"],
+            typeName: "SITGEO:CIVICI_COD_TOPON",
+            valueField: "CODICE_CONTROLLO",
+            returnFullData: true
         },
-        valueField: "CODICE_CONTROLLO",
+        filter: "contains",
         values: [],
         forceSelection: true,
         itemComponent: AddressesItem,
@@ -59,11 +66,11 @@ class AddressesEditor extends AttributeEditor {
             if (isValid) {
                 return updated;
             }
-            return assign({}, {[attribute]: ""});
+            return assign({}, {[attribute]: regControlCode.test(this.props.value) ? this.props.value : ""});
         };
     }
     render() {
-        return <AddressesCombobox ref="combo" {...this.props} filter="contains" autocompleteStreamFactory={createAddresses}/>;
+        return <AddressesCombobox ref="combo" {...this.props} valueField={this.props.filterProps.valueField} autocompleteStreamFactory={createAddresses}/>;
     }
 }
 
