@@ -22,6 +22,42 @@
     <dependency>
         <groupId>it.geosolutions.MapStore2-C040</groupId>
         <artifactId>MapStore2-C040-backend</artifactId>
+        <!-- geostore dependencies are already added by MVN WAR plugins
+            When using a snapshot version (e.g. 1.4.2-SNAPSHOT that includes
+            improvements to performances) you can not use them as dependenencies
+            in the backend project (not published on mvn repo). So excluding
+            them here avoids duplication of jars in the final WAR
+        -->
+        <exclusions>
+            <exclusion>
+                <groupId>it.geosolutions.geostore</groupId>
+                <artifactId>geostore-rest-api</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>it.geosolutions.geostore</groupId>
+                <artifactId>geostore-rest-impl</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>it.geosolutions.geostore</groupId>
+                <artifactId>geostore-services-api</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>it.geosolutions.geostore</groupId>
+                <artifactId>geostore-services-impl</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>it.geosolutions.geostore</groupId>
+                <artifactId>geostore-security</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>it.geosolutions.geostore</groupId>
+                <artifactId>geostore-persistence</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>it.geosolutions.geostore</groupId>
+                <artifactId>geostore-model</artifactId>
+            </exclusion>
+      </exclusions>
         <version>${project.version}</version>
     </dependency>
 
