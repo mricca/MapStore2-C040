@@ -12,7 +12,7 @@ const { register, clean } = require('../../MapStore2/web/client/utils/featuregri
 const AddressesEditor = require('../components/AddressesEditor');
 const MapInfoUtils = require('../../MapStore2/web/client/utils/MapInfoUtils');
 const geocollectViewerEnhancer = require('../enhancers/geocollectViewerEnhancer');
-const GeoCollectViewer = require('../viewer/GeoCollectViewer');
+const GeocollectViewer = require('../viewer/GeocollectViewer');
 
 const editors = {
     "AddressesEditor": {
@@ -42,7 +42,7 @@ module.exports = {
     addCustomViewer: (action$) =>
         action$.ofType(MAP_CONFIG_LOADED)
         .switchMap(() => {
-            MapInfoUtils.setViewer("Geocollect", geocollectViewerEnhancer(GeoCollectViewer));
+            MapInfoUtils.setViewer("Geocollect", geocollectViewerEnhancer(GeocollectViewer));
             return Rx.Observable.empty();
         })
 };
