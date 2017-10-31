@@ -8,6 +8,8 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const {Panel, Thumbnail} = require('react-bootstrap');
+const ModalImages = require('./ModalImages');
+const Message = require('../../../MapStore2/web/client/components/I18N/Message');
 const {isObject} = require('lodash');
 const moment = require('moment');
 
@@ -18,7 +20,6 @@ require("./RecordItem.css");
 class RecordItem extends React.Component {
     static propTypes = {
         currentLocale: PropTypes.string,
-        onZoomToExtent: PropTypes.func,
         record: PropTypes.object,
         style: PropTypes.object
     };
@@ -26,6 +27,16 @@ class RecordItem extends React.Component {
     static defaultProps = {
         currentLocale: 'en-US'
     };
+
+    constructor(props) {
+        super(props);
+        this.onClickThumbnail = this.onClickThumbnail.bind(this);
+        this.state = {
+            showModal: false,
+            imgSrc: "",
+            modalOptions: {}
+        };
+    }
 
     componentWillMount() {
         document.addEventListener('click', this.handleClick, false);
@@ -35,27 +46,40 @@ class RecordItem extends React.Component {
         document.removeEventListener('click', this.handleClick, false);
     }
 
-    getTitle = (title) => {
-        return isObject(title) ? title[this.props.currentLocale] || title.default : title || '';
-    };
+    onClickThumbnail(showModal, thumbSrc) {
+        this.setState({
+          modalOptions: {},
+          showModal: showModal,
+          imgSrc: thumbSrc
+        });
+    }
 
-    renderThumb = (thumbURL, record) => {
+    getTitle(title) {
+        return isObject(title) ? title[this.props.currentLocale] || title.default : title || '';
+    }
+
+    renderThumb(thumbURL, record) {
         let thumbSrc = 'http://geocollect.geo-solutions.it/opensdi2-manager/mvc/fileManager/extJSbrowser?action=get_image&file=' + thumbURL || defaultThumb;
         return (
-            <Thumbnail
-                id="geocollect-thumb"
-                className="thumb"
-                target="_blank"
-                href={thumbSrc}
-                alt={record && this.getTitle(record.name)}
-                src={thumbSrc}/>
+            <Thumbnail id="geocollect-thumb" className="gridcard thumb">
+                <a onClick={() => this.onClickThumbnail(true, thumbSrc)}>
+                    <ModalImages
+                        title={record && this.getTitle(record.name)}
+                        modalOptions={this.state.modalOptions}
+                        showModal={this.state.showModal}
+                        onClickThumbnail={this.onClickThumbnail}
+                        imgSrc={this.state.imgSrc}
+                        closeButtonText={<Message msgId={"geocollectViewer.images.modal.closeButtonText"}/>}/>
+                    <img className="img-fluid" src={thumbSrc} alt={record && this.getTitle(record.name)}/>
+                </a>
+            </Thumbnail>
         );
 
-    };
+    }
 
-    renderDescription = (record) => {
+    renderDescription(record) {
         return moment(record.mtime).format("dddd, MMMM Do YYYY, h:mm:ss a");
-    };
+    }
 
     render() {
         let record = this.props.record;
@@ -63,9 +87,9 @@ class RecordItem extends React.Component {
             <Panel className="record-item" style={this.props.style}>
                 {this.renderThumb(record && record.web_path, record)}
                 <div>
-                    <h4 className="truncateText">Label: {record && this.getTitle(record.name)}</h4>
-                    <h4 className="truncateText">Size: {record && record.size / 1000} Kb</h4>
-                    <h4 className="truncateText">Last Modified: {this.renderDescription(record)}</h4>
+                    <h4 className="truncateText"><strong><Message msgId={"geocollectViewer.images.label"}/>:</strong> {record && this.getTitle(record.name)}</h4>
+                    <h4 className="truncateText"><strong><Message msgId={"geocollectViewer.images.size"}/>:</strong> {record && record.size / 1000} Kb</h4>
+                    <h4 className="truncateText"><strong><Message msgId={"geocollectViewer.images.lastModified"}/>:</strong> {this.renderDescription(record)}</h4>
                 </div>
             </Panel>
         );

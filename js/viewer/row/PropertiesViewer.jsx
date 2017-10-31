@@ -9,7 +9,6 @@ const PropTypes = require('prop-types');
 
 const React = require('react');
 const {isString} = require('lodash');
-
 const alwaysExcluded = ["exclude", "titleStyle", "listStyle", "componentStyle", "title"];
 
 class PropertiesViewer extends React.Component {
@@ -47,7 +46,8 @@ class PropertiesViewer extends React.Component {
         return Object.keys(this.props)
             .filter(this.toExlude)
             .map((key) => {
-                if (this.props.title === 'Segnalazione' && this.renderProperty(this.props[key]) === 'null') return null;
+                const prop = this.renderProperty(this.props[key]);
+                if (prop === 'null' || !prop) return null;
                 return (
                     <p key={key} style={this.props.listStyle}><b>{key}</b> {this.renderProperty(this.props[key])}</p>
                 );

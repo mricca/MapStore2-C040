@@ -30,6 +30,16 @@
                 "errorSavingData": "Fehler beim Speichern von Daten.",
                 "successSaving": "Die Daten wurden korrekt gespeichert."
             }
+        },
+        "geocollectViewer":{
+            "images": {
+                "label": "Etikette",
+                "size": "Größe",
+                "lastModified": "Zuletzt bearbeitet",
+                "modal": {
+                    "closeButtonText": "schließen"
+                }
+            }
         }
     }
 }

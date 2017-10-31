@@ -10,7 +10,7 @@ const PropTypes = require('prop-types');
 const React = require('react');
 const PropertiesViewer = require('./row/PropertiesViewer');
 const RecordGrid = require('./row/RecordGrid');
-const {Tabs, Tab} = require('react-bootstrap');
+const {Tabs, Tab, Accordion, Panel} = require('react-bootstrap');
 const moment = require('moment');
 
 class GeocollectViewer extends React.Component {
@@ -39,37 +39,51 @@ class GeocollectViewer extends React.Component {
         }
         return null;
     }
+    renderWFSResponseTab(wfsResponse, RowViewer) {
+        if (wfsResponse) {
+            if (wfsResponse.features.length > 0) {
+                return (
+                        <Tab eventKey={2} key={'Modifica'} title={'Modifiche'} >
+                            <Accordion defaultActiveKey={0}>
+                            {
+                                (wfsResponse.features || []).map((feature, i) => {
+                                    return (
+                                        <Panel className="geocollect-sop" key={i} header={'Modifica del ' + moment(feature.properties.gc_created).format("DD-MM-YYYY, h:mm:ss a")} eventKey={i} style={{position: "relative"}}>
+                                            <RowViewer key={feature.properties.gc_created} exclude={["bbox"]} {...feature.properties}/>
+                                        </Panel>
+                                    );
+                                })
+                            }
+                            </Accordion>
+                        </Tab>
+                );
+            }
+            return null;
+        }
+        return null;
+    }
+    renderResponseInfoTab(response, RowViewer) {
+        if (response.features[0].id.split('.')[0] === 'cens_muri') {
+            return (
+                <Tab eventKey={1} key="cens_muri" title="Segnalazione">
+                    <RowViewer key="cens_muri" title={'Segnalazione'} exclude={["bbox"]} {...response.features[0].properties}/>
+                </Tab>
+            );
+        }
+        if (response.features[0].id.split('.')[0] === 'cens_muri_sop') {
+            return (
+                <Tab eventKey={2} key="cens_muri_sop" title="Segnalazione" >
+                    <RowViewer key="cens_muri_sop" title={'Sopralluogo'} exclude={["bbox"]} {...response.features[0].properties}/>
+                </Tab>
+            );
+        }
+    }
     render() {
         const RowViewer = (this.props.layer && this.props.layer.rowViewer) || this.props.rowViewer || PropertiesViewer;
-        let newResponse = this.props.wfsResponse;
-        if (newResponse) {
-            newResponse.features.push(this.props.response.features[0]);
-            newResponse.features.reverse();
-        } else {
-            newResponse = {
-                features: [this.props.response.features[0]]
-            };
-        }
         return (
             <Tabs id="geocollect-tab" bsStyle="tabs">
-                {
-                    (newResponse.features || []).map((feature, i) => {
-                        if (feature.id.split('.')[0] === 'cens_muri') {
-                            return (
-                                <Tab eventKey={1} key={i} title="Segnalazione">
-                                    <RowViewer key={i} title={'Segnalazione'} exclude={["bbox"]} {...feature.properties}/>
-                                </Tab>
-                            );
-                        }
-                        if (feature.id.split('.')[0] === 'cens_muri_sop') {
-                            return (
-                                <Tab eventKey={2} key={i} title={'Modifica del ' + moment(feature.properties.gc_created).format("DD-MM-YYYY, h:mm:ss a")} >
-                                    <RowViewer key={i} title={'Sopralluogo'} exclude={["bbox"]} {...feature.properties}/>
-                                </Tab>
-                            );
-                        }
-                    })
-                }
+                {this.renderResponseInfoTab(this.props.response, RowViewer)}
+                {this.renderWFSResponseTab(this.props.wfsResponse, RowViewer)}
                 {this.renderImg()}
             </Tabs>
         );
