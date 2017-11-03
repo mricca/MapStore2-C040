@@ -13,11 +13,14 @@ const RecordGrid = require('./row/RecordGrid');
 const {Tabs, Tab, Accordion, Panel} = require('react-bootstrap');
 const moment = require('moment');
 
+require('./GeocollectViewer.css');
+
 class GeocollectViewer extends React.Component {
     static propTypes = {
         response: PropTypes.object,
         wfsResponse: PropTypes.object,
-        imgsResponse: PropTypes.object,
+        imgsSopResponse: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+        imgsSegnResponse: PropTypes.object,
         layer: PropTypes.object,
         rowViewer: PropTypes.object
     };
@@ -26,16 +29,30 @@ class GeocollectViewer extends React.Component {
         return nextProps.response !== this.props.response;
     }
 
-    renderImg() {
-        if (this.props.imgsResponse && this.props.imgsResponse.data && this.props.imgsResponse.data.data.length > 0) {
+    renderSegnalazioniImgs() {
+        if (this.props.imgsSegnResponse && this.props.imgsSegnResponse.data && this.props.imgsSegnResponse.data.data.length > 0) {
             return (
-                <Tab eventKey={3} key={2} title={'Immagini'} >
+                <Tab eventKey={3} key={2} title="Immagini">
                     <div className="catalog-results">
                             <RecordGrid key="records"
-                                records={this.props.imgsResponse.data.data}
+                                records={this.props.imgsSegnResponse.data.data}
                             />
                     </div>
                 </Tab>);
+        }
+        return null;
+    }
+    renderSopralluoghiImgs(imgsSopResponse, i) {
+        if (imgsSopResponse[i].data.data.length > 0) {
+            return (
+                <Tab eventKey={2} key="imgs-changes" title="Immagini" >
+                    <div className="catalog-results">
+                        <RecordGrid key="records"
+                            records={imgsSopResponse[i].data.data}
+                        />
+                    </div>
+                </Tab>
+            );
         }
         return null;
     }
@@ -49,7 +66,12 @@ class GeocollectViewer extends React.Component {
                                 (wfsResponse.features || []).map((feature, i) => {
                                     return (
                                         <Panel className="geocollect-sop" key={i} header={'Modifica del ' + moment(feature.properties.gc_created).format("DD-MM-YYYY, h:mm:ss a")} eventKey={i} style={{position: "relative"}}>
-                                            <RowViewer key={feature.properties.gc_created} exclude={["bbox"]} {...feature.properties}/>
+                                            <Tabs id="geocollect-tab" bsStyle="pills">
+                                                <Tab eventKey={1} key="changes" title="Tabella" >
+                                                    <RowViewer key={feature.properties.gc_created} exclude={["bbox"]} {...feature.properties}/>
+                                                </Tab>
+                                                {this.renderSopralluoghiImgs(this.props.imgsSopResponse, i)}
+                                            </Tabs>
                                         </Panel>
                                     );
                                 })
@@ -84,7 +106,7 @@ class GeocollectViewer extends React.Component {
             <Tabs id="geocollect-tab" bsStyle="tabs">
                 {this.renderResponseInfoTab(this.props.response, RowViewer)}
                 {this.renderWFSResponseTab(this.props.wfsResponse, RowViewer)}
-                {this.renderImg()}
+                {this.renderSegnalazioniImgs()}
             </Tabs>
         );
     }

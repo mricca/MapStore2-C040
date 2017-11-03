@@ -47,7 +47,7 @@ module.exports = function karmaConfig(config) {
                         use: [{
                             loader: 'babel-loader'
                         }],
-                        include: path.join(__dirname, "MapStore2", "web", "client")
+                        include: [path.join(__dirname, "js"), path.join(__dirname, "MapStore2", "web", "client")]
                     },
                     {
                         test: /\.css$/,
