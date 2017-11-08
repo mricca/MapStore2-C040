@@ -31,6 +31,16 @@
                 "successSaving": "I dati sono stati salvati correttamente."
             }
         },
+        "geocollectViewer":{
+            "images": {
+                "label": "Etichetta",
+                "size": "Dimensione",
+                "lastModified": "Ultima modifica",
+                "modal": {
+                    "closeButtonText": "Chiudi"
+                }
+            }
+        },
         "tutorial": {
             "intro": {
                 "title": "Benvenuto su MapStore2",

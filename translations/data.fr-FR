@@ -30,6 +30,16 @@
                 "errorSavingData": "Erreur sur la sauvegarde des données.",
                 "successSaving": "Les données ont été correctement enregistrées."
             }
+        },
+        "geocollectViewer":{
+            "images": {
+                "label": "Étiquette",
+                "size": "Taille",
+                "lastModified": "Dernière modification",
+                "modal": {
+                    "closeButtonText": "Proche"
+                }
+            }
         }
     }
 }

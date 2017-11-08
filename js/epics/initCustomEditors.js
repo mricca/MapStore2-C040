@@ -10,6 +10,9 @@ const React = require('react');
 const { MAP_CONFIG_LOADED } = require('../../MapStore2/web/client/actions/config');
 const { register, clean } = require('../../MapStore2/web/client/utils/featuregrid/EditorRegistry');
 const AddressesEditor = require('../components/AddressesEditor');
+const MapInfoUtils = require('../../MapStore2/web/client/utils/MapInfoUtils');
+const geocollectViewerEnhancer = require('../enhancers/geocollectViewerEnhancer');
+const GeocollectViewer = require('../viewer/GeocollectViewer');
 
 const editors = {
     "AddressesEditor": {
@@ -34,6 +37,12 @@ module.exports = {
                     editors: editors[ed]
                 });
             });
+            return Rx.Observable.empty();
+        }),
+    addCustomViewer: (action$) =>
+        action$.ofType(MAP_CONFIG_LOADED)
+        .switchMap(() => {
+            MapInfoUtils.setViewer("Geocollect", geocollectViewerEnhancer(GeocollectViewer));
             return Rx.Observable.empty();
         })
 };
