@@ -132,8 +132,8 @@ module.exports = {
                 pathRewrite: {'^/rest/geostore': '/MapStore2/rest/geostore'}
             },
             '/MapStore2/proxy': {
-                target: "http://vm-linuxgeofetest.comune.genova.it",
-                pathRewrite: {'^/MapStore2/proxy': '/MapStore2/proxy'}
+                target: "http://dev.mapstore2.geo-solutions.it",
+                pathRewrite: {'^/MapStore2/proxy': '/mapstore/proxy'}
             },
             '/geoserver/': {
                 target: "http://mappe.comune.genova.it"
