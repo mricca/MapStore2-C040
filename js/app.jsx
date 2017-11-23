@@ -24,14 +24,19 @@ const startApp = () => {
         pages
     }));
     const StandardRouter = connect(routerSelector)(require('../MapStore2/web/client/components/app/StandardRouter'));
+    const {updateMapLayoutEpic} = require('../MapStore2/web/client/epics/maplayout');
+
     const appStore = require('../MapStore2/web/client/stores/StandardStore').bind(null, initialState, {
         maps: require('../MapStore2/web/client/reducers/maps'),
-        security: require('../MapStore2/web/client/reducers/security')
+        security: require('../MapStore2/web/client/reducers/security'),
+        maplayout: require('../MapStore2/web/client/reducers/maplayout')
+
     }, {
         "FEATUREVIEWER:startLoading": startLoading,
         "FEATUREVIEWER:updateFeatureLoader": updateFeatureLoader,
         addCustomEditors,
-        addCustomViewer
+        addCustomViewer,
+        updateMapLayoutEpic
     });
     const appConfig = {
         appStore,
