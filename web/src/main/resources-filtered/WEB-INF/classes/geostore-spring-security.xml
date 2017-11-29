@@ -110,7 +110,7 @@
                 <!-- groupSearchBase -->
                 <constructor-arg value="OU=Gruppi" />
                 <!-- roleSearchBase -->
-                <constructor-arg value="CN=Builtin,CN=Users" />
+                <constructor-arg value="CN=Builtin;CN=Users" />
                 <property name="groupSearchFilter" value="(member={0})" />
                 <property name="roleSearchFilter" value="(member={0})" />
                 <!-- the GeoStore convetion is:
