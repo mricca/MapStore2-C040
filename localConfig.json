@@ -289,8 +289,7 @@
           },
           "override": {
             "Toolbar": {
-                "position": 11,
-                "alwaysVisible": true
+                "position": 11
             }
           }
       },
@@ -342,7 +341,46 @@
                 {"id": "Viewport", "name": "queryform.spatialfilter.methods.viewport"},
                 {"id": "BBOX", "name": "queryform.spatialfilter.methods.box"},
                 {"id": "Circle", "name": "queryform.spatialfilter.methods.circle"},
-                {"id": "Polygon", "name": "queryform.spatialfilter.methods.poly"}
+                {"id": "Polygon", "name": "queryform.spatialfilter.methods.poly"},
+                {
+                     "id": "municipi",
+                     "name": "Municipi",
+                     "type": "wfsGeocoder",
+                     "url": "/geoserver-test/wfs",
+                     "autoZoom": true,
+                     "crossLayer": {
+                       "cqlTemplate": "NOME_MUNICIPIO = '${properties.NOME_MUNICIPIO}'",
+                       "geometryName": "GEOMETRY",
+                       "typeName": "SITGEO:V_MUNICIPI"
+                     },
+                     "filterProps": {
+                         "blacklist": [],
+                         "maxFeatures": 5,
+                         "predicate": "LIKE",
+                         "queriableAttributes": ["NOME_MUNICIPIO"],
+                         "typeName": "SITGEO:V_MUNICIPI",
+                         "valueField": "NOME_MUNICIPIO"
+                     }
+                 },{
+                      "id": "unita",
+                      "name": "Unità Urbanistiche",
+                      "type": "wfsGeocoder",
+                      "url": "/geoserver-test/wfs",
+                      "autoZoom": true,
+                      "crossLayer": {
+                        "cqlTemplate": "NOME_UU = '${properties.NOME_UU}'",
+                        "geometryName": "GEOMETRY",
+                        "typeName": "SITGEO:V_UNITA_URBANISTICHE"
+                      },
+                      "filterProps": {
+                          "blacklist": [],
+                          "maxFeatures": 5,
+                          "predicate": "LIKE",
+                          "queriableAttributes": ["NOME_UU"],
+                          "typeName": "SITGEO:V_UNITA_URBANISTICHE",
+                          "valueField": "NOME_UU"
+                      }
+                  }
             ]
         }
 
@@ -745,8 +783,7 @@
           },
           "override": {
             "Toolbar": {
-                "position": 11,
-                "alwaysVisible": true
+                "position": 11
             }
           }
       },
