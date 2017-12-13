@@ -10,7 +10,6 @@
   "translationsPath": ["MapStore2/web/client/translations", "translations"],
   "mapquestApiKey": "__API_KEY_MAPQUEST__",
   "initialMapFilter": "",
-  "ignoreMobileCss": true,
   "useAuthenticationRules": true,
   "authenticationRules": [{
     "urlPattern": ".*geostore.*",
@@ -99,14 +98,8 @@
         "name": "Identify",
         "showIn": ["Settings"],
         "cfg": {
-          "style": {
-            "position": "absolute",
-            "width": "100%",
-            "bottom": "0px",
-            "zIndex": 1023,
-            "maxHeight": "70%",
-            "marginBottom": 0
-          },
+          "panelClassName": "mapstore-mobile-identify",
+          "fullscreen": true,
           "draggable": false,
           "collapsible": true,
           "viewerOptions": {
@@ -137,21 +130,7 @@
           }
         }
       },
-      {
-        "name": "MousePosition",
-        "cfg": {
-          "id": "mapstore-mouseposition-mobile",
-          "editCRS": true,
-          "showLabels": true,
-          "showToggle": true,
-          "filterAllowedCRS": ["EPSG:4326", "EPSG:3857"],
-          "additionalCRS": {
-            "EPSG:3003": {
-              "label": "EPSG:3003"
-            }
-          }
-        }
-      }, {
+       {
         "name": "Search",
         "cfg": {
           "withToggle": ["max-width: 768px", "min-width: 768px"],
@@ -203,14 +182,6 @@
         "cfg": {
           "id": "navigationBar"
         }
-      }, {
-        "name": "Toolbar",
-        "id": "IdentifyBar",
-        "stateSelector": "identify",
-        "cfg": {
-          "id": "identifyBar"
-        },
-        "isDefault": false
       }, "ZoomAll", {
         "name": "MapLoading",
         "override": {
@@ -657,14 +628,8 @@
       }, {
         "name": "Identify",
         "cfg": {
-          "style": {
-            "position": "absolute",
-            "width": "100%",
-            "bottom": "0px",
-            "zIndex": 1010,
-            "maxHeight": "70%",
-            "marginBottom": 0
-          },
+                    "panelClassName": "mapstore-mobile-identify",
+                    "fullscreen": true,
           "draggable": false,
           "collapsible": true,
           "viewerOptions": {
