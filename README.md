@@ -1,5 +1,10 @@
 GeoPortale - Comune di Genova
 ==========
+Build status
+------------
+Master: [![Build Status](https://travis-ci.org/geosolutions-it/MapStore2-C040.svg?branch=master)](https://travis-ci.org/geosolutions-it/MapStore2-C040)
+
+Production: [![Build Status](https://travis-ci.org/geosolutions-it/MapStore2-C040.svg?branch=production)](https://travis-ci.org/geosolutions-it/MapStore2-C040)
 
 Quick Start
 ------------
