@@ -93,12 +93,13 @@ const getSpatialFilter = (geometry, options, operation = "INTERSECTS") => {
 
 const createAndAddLayers = (areasFeatures, store, checkedElementsFeatures) => {
     let actions = [];
+    const cantieriState = store.getState().cantieri;
     let areaOptions = {
         features: areasFeatures,
         group: "Cantiere",
         title: "Aree",
         id: AREAS_LAYER,
-        name: "CORSO_1:AREE_CANTIERE",
+        name: cantieriState && cantieriState.areasLayerName,
         style: {
             type: "MultiPolygon",
             stroke: {
