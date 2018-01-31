@@ -16,6 +16,7 @@ const startApp = () => {
     const {pages, pluginsDef, initialState, storeOpts, printingEnabled} = require('./appConfigllpp');
     const routerSelector = createSelector(state => state.locale, (locale) => ({
         locale: locale || {},
+        version: "no-version",
         themeCfg: {
             theme: "comge"
         },

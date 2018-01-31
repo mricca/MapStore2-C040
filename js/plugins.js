@@ -66,6 +66,7 @@ module.exports = {
         NotificationsPlugin: require('../MapStore2/web/client/plugins/Notifications'),
         FeatureEditorPlugin: require('../MapStore2/web/client/plugins/FeatureEditor'),
         AutoMapUpdatePlugin: require('../MapStore2/web/client/plugins/AutoMapUpdate'),
+        DetailsPlugin: require('../MapStore2/web/client/plugins/Details'),
         WidgetsPlugin: require('../MapStore2/web/client/plugins/Widgets'),
         WidgetsBuilderPlugin: require('../MapStore2/web/client/plugins/WidgetsBuilder')
     },

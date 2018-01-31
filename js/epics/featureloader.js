@@ -61,7 +61,7 @@ module.exports = {
                                                     },
                                                     features: res.data.features
                                                 }),
-                                                zoomToExtent(bbox(res.data), "EPSG:4326")]).filter(a => !( action.isWmsViewer && a.type === 'ADD_LAYER'))
+                                                zoomToExtent(bbox(res.data), "EPSG:4326", 19)]).filter(a => !( action.isWmsViewer && a.type === 'ADD_LAYER'))
                                         )
                                     )
                                 )

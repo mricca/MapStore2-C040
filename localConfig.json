@@ -235,7 +235,7 @@
             }
           }
         }
-      }, "HelpLink", "Share", "DrawerMenu", {
+      }, "HelpLink", "Share", "Details", "DrawerMenu", {
         "name": "BackgroundSelector",
         "cfg": {
           "bottom": "30px"
@@ -391,7 +391,7 @@
         "cfg": {
           "activateQueryTool": true,
           "activateAddLayerButton": true,
-          "showExpandTitle": true,
+          "showFullTitleOnExpand": true,
           "spatialMethodOptions": [
                   {"id": "BBOX", "name": "queryform.spatialfilter.methods.box"},
                   {"id": "Circle", "name": "queryform.spatialfilter.methods.circle"},
@@ -659,7 +659,7 @@
         "name": "TOC",
         "cfg": {
             "activateMapTitle": false,
-            "showExpandTitle": true,
+            "showFullTitleOnExpand": true,
             "activateSettingsTool": false,
             "activateRemoveLayer": false
           }
