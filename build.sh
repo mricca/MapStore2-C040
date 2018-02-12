@@ -1,5 +1,9 @@
 #!/bin/bash
 set -e
+if grep -q XXXXXXXXXX 'web/ldap.properties'; then
+  echo "Please configure web/ldap.property first"
+  exit 1
+fi
 
 #SiRAC integration needs a keystore for secure backend comunications
 if [ ! -f web/src/main/webapp/keystore/encryptAuthResponse_Rijndael_256_PBEWithSHAAnd128BitRC4_100.key ]; then
