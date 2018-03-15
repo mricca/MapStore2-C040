@@ -387,6 +387,7 @@
         "name": "TOC",
         "cfg": {
           "activateQueryTool": true,
+          "activateMetedataTool": false,
           "activateAddLayerButton": true,
           "showFullTitleOnExpand": true,
           "spatialMethodOptions": [
@@ -653,6 +654,7 @@
         "name": "TOC",
         "cfg": {
             "activateMapTitle": false,
+            "activateMetedataTool": false,
             "showFullTitleOnExpand": true,
             "activateSettingsTool": false,
             "activateRemoveLayer": false
