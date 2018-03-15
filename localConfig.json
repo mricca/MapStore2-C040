@@ -113,7 +113,7 @@
             "alwaysVisible": true
           }
         }
-            }, "Home", "TOC", {
+            }, "Home", {"name": "TOC", "cfg": {"showFullTitleOnExpand": true, "activateMetedataTool": false }}, {
         "name": "Tutorial",
         "cfg": {
           "preset": "default_mobile_tutorial"
