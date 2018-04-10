@@ -116,7 +116,12 @@
             "alwaysVisible": true
           }
         }
-            }, "Home", {"name": "TOC", "cfg": {"showFullTitleOnExpand": true, "activateMetedataTool": false }}, {
+            }, "Home", {"name": "TOC", "cfg": {"showFullTitleOnExpand": true, "activateMetedataTool": false }},{
+              "name": "TOCItemsSettings",
+              "cfg": {
+                "width": 300
+              }
+            }, {
         "name": "Tutorial",
         "cfg": {
           "preset": "default_mobile_tutorial"
@@ -413,7 +418,7 @@
             }
           }
         }
-      },
+      }, "TOCItemsSettings",
       {
         "name": "Tutorial",
         "cfg": {
