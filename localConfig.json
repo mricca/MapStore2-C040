@@ -259,27 +259,17 @@
         }
       },
       {
-          "name": "Identify",
-          "cfg": {
-              "panelClassName": "mapstore-right-panel modal-content",
-              "glyph": "info-sign",
-              "draggable": false,
-              "collapsible": true,
-              "viewerOptions": {
-                  "container": "{context.ReactSwipe}",
-                  "header": "{context.SwipeHeader}",
-                  "draggable": false,
-                  "collapsible": false,
-                  "headerOptions": {
-                      "useButtons": true
-                  }
-              }
-          },
-          "override": {
-            "Toolbar": {
-                "position": 11
-            }
+        "name": "Identify",
+        "cfg": {
+          "viewerOptions": {
+            "container": "{context.ReactSwipe}"
           }
+        },
+        "override": {
+          "Toolbar": {
+            "position": 11
+          }
+        }
       },
       "Attribution",
       {
@@ -892,10 +882,7 @@
         "hide": true
       },
       {
-        "name": "MapSearch",
-        "cfg": {
-          "splitTools" : false
-        }
+        "name": "MapSearch"
       },
       {
         "name": "CreateNewMap",
@@ -903,10 +890,21 @@
           "allowedRoles": ["ADMIN"]
         }
       },
-      "Maps",
+      "NavMenu",
+      "FeaturedMaps",
+      {
+        "name": "Maps",
+        "cfg": {
+          "mapsOptions": {
+            "start": 0,
+            "limit": 12
+          },
+          "fluid": false
+        }
+      },
       "Footer"
     ],
-    "manager": ["Header", "Redirect", "Manager", "Home", "UserManager", "GroupManager", "Footer"],
+    "manager": ["Redirect", "Manager", "Home", "UserManager", "GroupManager", "Footer"],
     "cantieri": [{
       "name": "Map",
       "cfg" :{

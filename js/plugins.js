@@ -71,7 +71,10 @@ module.exports = {
         DashboardEditor: require('../MapStore2/web/client/plugins/DashboardEditor'),
         WidgetsPlugin: require('../MapStore2/web/client/plugins/Widgets'),
         WidgetsBuilderPlugin: require('../MapStore2/web/client/plugins/WidgetsBuilder'),
-        TOCItemsSettingsPlugin: require('../MapStore2/web/client/plugins/TOCItemsSettings')
+        TOCItemsSettingsPlugin: require('../MapStore2/web/client/plugins/TOCItemsSettings'),
+        FeaturedMaps: require('../MapStore2/web/client/plugins/FeaturedMaps'),
+        NavMenu: require('../MapStore2/web/client/product/plugins/NavMenu')
+
     },
     requires: {
         ReactSwipe: require('react-swipeable-views').default,
