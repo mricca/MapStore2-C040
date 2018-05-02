@@ -142,6 +142,9 @@ module.exports = {
             },
             '/geonetwork': {
                 target: "http://mappe.comune.genova.it"
+            },
+            '/geofence': {
+                target: "http://vm-linuxgeofetest.comune.genova.it"
             }
         }
     },

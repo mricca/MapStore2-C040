@@ -40,7 +40,15 @@ module.exports = {
          name: "dashboard",
          path: "/dashboard",
          component: require('../MapStore2/web/client/product/pages/Dashboard')
-        }],
+     }, {
+         name: "dashboard",
+         path: "/dashboard/:did",
+         component: require('../MapStore2/web/client/product/pages/Dashboard')
+     }, {
+         name: "rulesmanager",
+         path: "/rules-manager",
+         component: require('../MapStore2/web/client/product/pages/RulesManager')
+     }],
      pluginsDef: require('./plugins.js'),
      initialState: {
          defaultState: {

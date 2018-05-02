@@ -1,5 +1,10 @@
 {
   "geoStoreUrl": "rest/geostore/",
+  "geoFenceUrl": "/",
+  "geoFenceGeoServerInstance": {
+    "url": "/geoserver-test/",
+    "id": 5
+  },
   "printUrl": "/geoserver-test/pdf/info.json",
   "wmsURL": "/geoserver-test/wms",
   "proxyUrl": {
@@ -250,7 +255,19 @@
             "scalebar": {
               "container" : "#mapstore-map-footer-container"
             }
-          }
+          },
+          "additionalLayers": [
+            {
+              "type": "wms",
+              "url": "/geoserver-test/TEST/wms",
+              "visibility": true,
+              "title": "Elevation",
+              "name": "elevation",
+              "format": "application/bil16",
+              "useForElevation": true,
+              "hidden": true
+            }
+          ]
         }
       }, "HelpLink", "Share", "Details", "DrawerMenu", {
         "name": "BackgroundSelector",
@@ -496,6 +513,7 @@
       }, {
         "name": "MousePosition",
         "cfg": {
+          "showElevation": true,
           "editCRS": true,
           "showLabels": true,
           "showToggle": true,
@@ -905,6 +923,74 @@
       "Footer"
     ],
     "manager": ["Redirect", "Manager", "Home", "UserManager", "GroupManager", "Footer"],
+    "rulesmanager": [
+      {
+        "name": "OmniBar",
+        "cfg": {
+          "containerPosition": "header",
+          "className": "navbar shadow navbar-home"
+        }
+      },
+      {
+        "name": "Home",
+        "override": {
+          "OmniBar": {
+            "position": 1,
+            "priority": 1
+          }
+        }
+      },
+      "Login",
+      {
+        "name": "Header",
+        "hide": true
+      },
+      "RulesDataGrid",
+      "Notifications",
+      {
+        "name": "RulesManagerFooter",
+        "cfg": {
+          "containerPosition": "footer"
+        }
+      },
+      {
+        "name": "RulesEditor",
+        "cfg": {
+          "containerPosition": "columns"
+        }
+      }
+    ],
+    "dashboard": [
+      {
+        "name": "OmniBar",
+        "cfg": {
+          "containerPosition": "header",
+          "className": "navbar shadow navbar-home"
+        }
+      },
+      "ManagerMenu",
+      "Login",
+      {
+        "name": "DashboardEditor",
+        "cfg": {
+          "catalog": {
+            "url": "/geoserver-test/csw",
+            "type": "csw",
+            "title": "Demo CSW Service",
+            "autoload": true
+          },
+          "containerPosition": "columns"
+        }
+      },
+      {
+        "name": "QueryPanel",
+        "cfg": {
+          "containerPosition": "columns"
+        }
+      },
+      "Dashboard",
+      "Notifications"
+    ],
     "cantieri": [{
       "name": "Map",
       "cfg" :{
@@ -979,36 +1065,6 @@
             }
           }
         },
-         "BackgroundSelector"],
-    "dashboard": [
-      {
-        "name": "OmniBar",
-        "cfg": {
-          "containerPosition": "header",
-          "className": "navbar shadow navbar-home"
-        }
-      },
-      "ManagerMenu",
-      "Login",
-      {
-        "name": "DashboardEditor",
-        "cfg": {
-          "catalog": {
-            "url": "/geoserver-test/csw",
-            "type": "csw",
-            "title": "Demo CSW Service",
-            "autoload": true
-          },
-          "containerPosition": "columns"
-        }
-      },
-      {
-        "name": "QueryPanel",
-        "cfg": {
-          "containerPosition": "columns"
-        }
-      },
-      "Dashboard"
-    ]
+         "BackgroundSelector"]
   }
 }
