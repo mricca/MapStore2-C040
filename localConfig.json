@@ -1018,6 +1018,14 @@
       "Dashboard",
       "NavMenu",
       {
+        "name": "Tutorial",
+        "cfg": {
+          "allowClicksThruHole": false,
+          "containerPosition": "header",
+          "preset": "dashboard_tutorial"
+        }
+      },
+      {
         "name": "Header",
         "hide": true
       },
