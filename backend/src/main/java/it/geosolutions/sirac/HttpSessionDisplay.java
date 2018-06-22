@@ -21,15 +21,15 @@ import javax.servlet.http.HttpServletResponse;
 
 public class HttpSessionDisplay extends HttpServlet {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -4620985297130419694L;
-	
+
 	private static final String BEARER_TYPE = "bearer";
-	
+
 	@Autowired
 	UserSessionService userSessionService;
-	
+
 	String head;
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
@@ -40,23 +40,23 @@ public class HttpSessionDisplay extends HttpServlet {
 			head = "New Session Value";
 		} else {
 			head = "Old Session value";
-			Integer oldcount =(Integer)session.getAttribute("count"); 
+			Integer oldcount =(Integer)session.getAttribute("count");
 			if (oldcount != null) {
 				count = new Integer(oldcount.intValue() + 1);
 			}
 		}
-		session.setAttribute("count", count); 
-		
+		session.setAttribute("count", count);
+
 		String showmethedata = "";
 		String nome;
-		Enumeration<String> nomi = session.getAttributeNames(); 
+		Enumeration<String> nomi = session.getAttributeNames();
 		while ( nomi.hasMoreElements()) {
 			nome = nomi.nextElement();
 			showmethedata += "<TR><TD>"+nome+"</TD>" +
 					"<TD>" + session.getAttribute(nome) + "</TD>"+
 					"</TR>";
 		}
-		
+
 		ServletContext context = getServletContext();
 		WebApplicationContext wac = WebApplicationContextUtils.
                 getRequiredWebApplicationContext(context);
@@ -68,7 +68,7 @@ public class HttpSessionDisplay extends HttpServlet {
 		String msSession = session.getAttribute("mapstore_session_id").toString();
 		UserSession eccolo = userSessionService.refreshSession(msSession, userSessionService.getRefreshToken(msSession));
 		SessionToken ti_serve_questo = toSessionToken(eccolo.getId(), eccolo);
-		
+
 		String toBePersisted = "{\"user\":{\"attribute\":[{\"name\":\"provider\",\"value\":\"sirac\"}],"
 				+ "\"enabled\":true,"
 				+ "\"id\": "+ eccolo.getUser().getId() +","
@@ -78,22 +78,22 @@ public class HttpSessionDisplay extends HttpServlet {
 				+ "\"token\": \""+ti_serve_questo.getAccessToken()+"\","
 				+ "\"refresh_token\":\""+ti_serve_questo.getRefreshToken()+"\","
 				+ "\"expires\": "+ti_serve_questo.getExpires()+"}";
-		
+
 		String head = "<head><script> "
 				+ "localStorage.setItem(\"mapstore_session_id\", \""+session.getAttribute("mapstore_session_id")+"\"); "
 				+ "localStorage.setItem(\"mapstore2.persist.security\", '"+toBePersisted+"'); "
 				//+ "setTimeout(function(){ window.location.replace('/MapStore2_sirac'); }, 1); "
 				+ "setTimeout(function(){ window.location.href = './' }, 1); "
 				+ "</script></head>";
-		
-		out.println("<HTML>"+head+"<BODY BGCOLOR=\"pink\">\n" +
+
+		out.println("<HTML>"+head+"<BODY>\n" +
 //				"<H3 ALIGN=\"CENTER\">Description about Session:</H3>\n" +
-//				"<TABLE BORDER=1 ALIGN=CENTER>\n" + 
+//				"<TABLE BORDER=1 ALIGN=CENTER>\n" +
 //				"<TR>\n" +
 //				"<TH>Information Type<TH>Session Value\n"+
-//				"<TR>\n" + "<TD>ID\n" +"<TD>" + 
-//				session.getId() + "\n" +"<TR>\n" + 
-//				" <TD>Session Creation Time\n" +" <TD>" + 
+//				"<TR>\n" + "<TD>ID\n" +"<TD>" +
+//				session.getId() + "\n" +"<TR>\n" +
+//				" <TD>Session Creation Time\n" +" <TD>" +
 //				new Date(session.getCreationTime()) + "\n" +
 //				"<TR>\n" +"  <TD>Last Session Access Time\n" +"  <TD>" +
 //				new Date(session.getLastAccessedTime()) + "\n" +
@@ -109,11 +109,11 @@ public class HttpSessionDisplay extends HttpServlet {
 //				+"\n</TABLE>\n" +
 				"</BODY></HTML>");
 	}
-	
+
 	public void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		doGet(request, response);
 	}
-	
+
 	private SessionToken toSessionToken(String accessToken, UserSession sessionToken) {
 		if(sessionToken == null) {
 			return null;
