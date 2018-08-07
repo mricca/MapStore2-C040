@@ -709,6 +709,7 @@
         "name": "Search",
         "cfg": {
           "withToggle": ["max-width: 768px", "min-width: 768px"],
+          "searchOptions": {
           "services": [{
             "type": "wfs",
             "priority": 6,
@@ -751,6 +752,7 @@
               "limit": 3
             }
           }]
+          }
         }
       }, {
         "name": "Toolbar",
